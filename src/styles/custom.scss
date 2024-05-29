@@ -1,0 +1,394 @@
+//Modificar Bootstrap
+$primary: #199ebc;
+$secondary: #4bdfd9;
+$danger: #dc3545;
+$success: #28a745;
+$info: #304562;
+$light: #f5f6f7;
+$dark: #343a40;
+
+@import '../node_modules/bootstrap/scss/bootstrap';
+
+//Main
+body {
+    font-family: "Varela Round", sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: $dark;
+}
+
+//Personalización de los contenedores
+.custom-container {
+    display: block;
+
+    &__center {
+        display: flex;
+        justify-content: center;
+    }
+
+    &__right {
+        justify-content: right;
+    }
+
+    &__button {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__login {
+        display: block;
+        max-width: 100%;
+        padding: 2.2rem 2rem;
+    }
+
+    &__reason-pill {
+        display: flex;
+        justify-content: center;
+        background-color: $gray-300;
+        border-radius: 20px;
+        padding: .2rem 0;
+    }
+}
+
+.reason-rev {
+    color: $yellow-700;
+    font-weight: 600;
+    text-transform: uppercase;
+    background-color: $yellow-200;
+}
+
+.reason-cir {
+    color: $red-700;
+    font-weight: 600;
+    text-transform: uppercase;
+    background-color: $red-200;
+}
+
+.reason-vac {
+    color: $teal-700;
+    font-weight: 600;
+    text-transform: uppercase;
+    background-color: $teal-200;
+}
+
+.reason-cur {
+    color: $pink-700;
+    font-weight: 600;
+    text-transform: uppercase;
+    background-color: $pink-200;
+}
+
+.reason-mue {
+    color: $purple-700;
+    font-weight: 600;
+    text-transform: uppercase;
+    background-color: $purple-200;
+}
+
+.token-container {
+    text-align: center;
+    width: 20rem;
+
+    & img {
+        max-width: 12rem;
+        height: auto;
+    }
+
+}
+
+.custom-list-style {
+    list-style-type: none;
+    border: 2px solid $gray-200;
+    border-radius: 15px;
+    margin-bottom: .6rem;
+    padding: 0.8rem;
+
+    &__clickable {
+
+        &:hover {
+            cursor: pointer;
+            color: $dark;
+            border-color: $primary;
+            background-color: $light;
+        }
+    }
+}
+
+
+
+// .custom-button-display {
+//     display: flex;
+
+// }
+
+//Personlización de los formularios
+.custom-textfield {
+    font-family: "Varela Round", sans-serif;
+
+    // background-color: #199ebc;
+    // border: 1px solid #dc3545;
+}
+
+//Personalización de los botones
+.custom-btn {
+    background-color: $primary;
+    color: $white;
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    text-transform: uppercase;
+    font-weight: 900;
+    border: 0;
+    padding: .4rem .8rem;
+    letter-spacing: 0.1em;
+    border-radius: 10px;
+    transition: color 0.3s, background-color 0.3s;
+
+    &:hover {
+        background-color: lighten($primary, 14%);
+    }
+
+    &__clear {
+        background-color: $white;
+        color: $primary;
+        border: 2px solid $primary;
+        padding: .3rem .7rem;
+        transition: color 0.3s, background-color 0.3s;
+
+        &:hover {
+            background-color: $primary;
+            color: $white;
+        }
+    }
+
+    &__soft {
+        background-color: $gray-500;
+    }
+
+    &__no-button {
+        color: lighten($info, 30%);
+        text-transform: capitalize;
+        background-color: transparent;
+        transition: color 0.3s, background-color 0.3s;
+
+        &:hover {
+            color: $info;
+            cursor: pointer;
+            background-color: $light;
+        }
+    }
+}
+
+//Personalización de los divisores
+.short-divider {
+    width: 4.5rem;
+    height: 4px;
+    background-color: $yellow-600;
+}
+
+.long-divider {
+    width: 100%;
+    height: 1px;
+    background-color: $gray-500;
+}
+
+//Personalización de los chips
+.landpage-chip {
+    background: $primary;
+    color: $white;
+    font-family: "Varela Round", sans-serif;
+    font-size: .8rem;
+    padding: 0.2rem;
+    border-radius: 6px;
+    margin: 0.5rem;
+    line-height: 1rem;
+
+    &__important {
+        background: $yellow-600;
+    }
+}
+
+//Personalización de los enlaces
+a {
+    color: $dark;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+        color: darken($primary, 10%);
+        text-decoration: none;
+    }
+
+    &:active {
+        color: lighten($primary, 10%);
+    }
+}
+
+
+
+//Estilo del título/textos
+.brand-title {
+    font-size: 1.8rem;
+    font-family: "Berkshire Swash", serif;
+    font-weight: 400;
+    font-style: normal;
+    color: $primary !important;
+
+}
+
+.overTitle {
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    color: $primary;
+}
+
+.title {
+    font-family: "Berkshire Swash", serif;
+    font-weight: 400;
+    font-style: normal;
+    color: $info;
+
+    &__footer {
+        color: $white;
+        font-size: 1.5rem;
+    }
+}
+
+.h6-info {
+    margin: 0;
+    margin-left: 1rem;
+    font-size: .9rem;
+}
+
+.small-text {
+    font-size: .8rem;
+    color: $gray-600;
+}
+
+// Estilo de la tabla
+.custom-table {
+    background-color: $white;
+
+    & th {
+        font-family: "M PLUS Rounded 1c", sans-serif;
+        font-weight: 600;
+        font-style: normal;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        text-align: center;
+        color: $primary;
+        vertical-align: middle;
+    }
+
+    & td {
+        vertical-align: middle;
+        margin: 0;
+    }
+
+    & tr:hover {
+        background-color: $gray-200;
+    }
+}
+
+//Estilo de las imágenes
+.intro-img {
+    margin-left: 5rem;
+    width: 29rem;
+}
+
+@media (min-width: 768px) {
+    .custom-container {
+
+        &__button {
+            flex-direction: row-reverse;
+            gap: 0.5rem;
+        }
+
+        &__button-table {
+            display: flex;
+        }
+
+        &__login {
+            max-width: 65%;
+        }
+
+        &__md-main {
+            display: block;
+            max-width: 60%;
+            margin-right: auto;
+            margin-left: auto;
+            background-color: $white;
+            box-shadow: 0 0 10px rgba(47, 18, 18, 0.3);
+            border-radius: 0px 0px 30px 30px;
+        }
+
+        // &__md-button {
+        //     display: flex;
+        //     flex: 1;
+
+        //     & button {
+        //         flex: 1;
+        //         width: 100%;
+        //     }
+        // }
+    }
+
+
+    // .custom-button {
+    //     width: 30%;
+    // }
+
+
+
+    // .custom-center-container-md-login {
+    //     max-width: 550px;
+    //     margin-right: auto;
+    //     margin-left: auto;
+    //     background-color: rgb(255, 255, 255);
+    //     padding: 3rem;
+    //     margin-top: 5rem;
+    //     border-radius: 10px;
+    //     box-shadow: 0 0 10px rgba(47, 18, 18, 0.3);
+    // }
+
+    // .custom-center-container-md-table {
+    //     max-width: 830px;
+    //     margin-right: auto;
+    //     margin-left: auto;
+    //     background-color: rgb(255, 255, 255);
+    //     padding: 3rem;
+    //     margin-top: 5rem;
+    //     border-radius: 10px;
+    //     box-shadow: 0 0 10px rgba(47, 18, 18, 0.3);
+    // }
+
+    // .custom-center-container-md {
+    //     max-width: 730px;
+    //     margin-right: auto;
+    //     margin-left: auto;
+    //     background-color: rgb(255, 255, 255);
+    //     padding: 3rem;
+    //     margin-top: 5rem;
+    //     border-radius: 10px;
+    //     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    // }
+
+}
+
+@media (min-width: 910px) {
+    .custom-container {
+
+        &__md-main-table {
+            display: block;
+            max-width: 90%;
+            margin-right: auto;
+            margin-left: auto;
+            background-color: $white;
+            box-shadow: 0 0 10px rgba(47, 18, 18, 0.3);
+            border-radius: 0px 0px 30px 30px;
+        }
+
+    }
+}
