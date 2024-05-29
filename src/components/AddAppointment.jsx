@@ -1,13 +1,14 @@
 import { useState, useEffect, useMemo } from "react";
-import { useAuthStore } from '../hooks/useAuthStore';
+// import { useAuthStore } from '../hooks/useAuthStore';
 import { useNavigate } from "react-router-dom";
 import { peticionGET, peticionPOSTJSON } from "../utils/ajax";
 
 import { Chip, Divider, MenuItem, Select } from "@mui/material";
+import ClientData from "./ClientData";
 
 function AddAppointment() {
   const navigate = useNavigate();
-  const { clientId } = useAuthStore();
+  // const { clientId } = useAuthStore();
 
   const [specialty, setSpecialty] = useState('domestico');
   const [veterinarians, setVeterinarians] = useState([]);
@@ -45,15 +46,15 @@ function AddAppointment() {
   });
 
   //Información para mostrar los datos del cliente
-  const [clientData, setClientData] = useState({
-    id: '',
-    name: '',
-    email: '',
-    dni: '',
-    phone: '',
-    password: '',
-    pets: [],
-  });
+  // const [clientData, setClientData] = useState({
+  //   id: '',
+  //   name: '',
+  //   email: '',
+  //   dni: '',
+  //   phone: '',
+  //   password: '',
+  //   pets: [],
+  // });
 
   // Siempre se mostrarán los siquientes 14 días. Al clicar se mostrarán las horas disponibles. 
   //Calcular la fecha +2 días
@@ -67,23 +68,23 @@ function AddAppointment() {
   }
 
   // Recoger la información del cliente
-  useEffect(() => {
+  // useEffect(() => {
 
-    async function fetchData() {
-      let params = new FormData();
-      params.append('client', "true");
+  //   async function fetchData() {
+  //     let params = new FormData();
+  //     params.append('client', "true");
 
-      let response = await peticionGET('clients/' + clientId, params);
+  //     let response = await peticionGET('clients/' + clientId, params);
 
-      if (response.ok) {
-        const data = response.data;
-        setClientData(data);
-      }
-    }
+  //     if (response.ok) {
+  //       const data = response.data;
+  //       setClientData(data);
+  //     }
+  //   }
 
-    fetchData();
+  //   fetchData();
 
-  }, [clientId]);
+  // }, [clientId]);
 
   //Recoger los veterinarios de la especialidad seleccionada
   useEffect(() => {
@@ -154,14 +155,15 @@ function AddAppointment() {
     }
   };
 
-
+  console.log(appointmentData);
   return (
-    <div className="container-sm custom-center-container-md">
-      <div>
-      </div>
-      <div className="mb-4 mt-4">
-        <div className="container-center">
-          <h3 >Datos de {clientData.name.split(' ')[0]} {clientData.name.split(' ')[1]}</h3>
+    <div className="custom-container custom-container__md-main pt-4 px-4 pb-3 mb-5">
+
+      <ClientData appointmentData={appointmentData} handleBtnClick={handleBtnClick} />
+
+      {/* <div>
+        <div>
+          <h2 className="title text-center" >Datos del Cliente</h2>
         </div>
 
         <div className="p-3 add-border">
@@ -184,9 +186,9 @@ function AddAppointment() {
             }
           </div>
         </div>
-      </div>
+      </div> */}
 
-      <Divider sx={{ display: { xs: 'block', sm: 'none' }, height: 1, bgcolor: 'grey' }} />
+      <Divider className="long-divider" />
 
       <div className="mb-4 mt-4">
         <div className="container-center">
@@ -233,7 +235,7 @@ function AddAppointment() {
 
       </div>
 
-      <Divider sx={{ display: { xs: 'block', sm: 'none' }, height: 1, bgcolor: 'grey' }} />
+      <Divider className="long-divider" />
 
       <div className="mb-4 mt-4">
         <div className="container-center">
@@ -306,10 +308,11 @@ function AddAppointment() {
           </div>
         </div>
       </div>
-      <div className="custom-button-display mb-4">
+
+      <div className="custom-container custom-container__button">
         <button
           type="submit"
-          className="btn btn-primary mt-3 custom-button"
+          className="custom-btn"
           onClick={handleSubmit}>
           Agendar Cita
         </button>

@@ -1,3 +1,4 @@
+//TODO: VALIDACIONES DE LOS CAMPOS
 import { useState } from "react";
 import { useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
@@ -66,9 +67,9 @@ function AddTreatment() {
   };
 
   return (
-    <div className="container-sm custom-center-container-md mb-3 p-4">
-      <div className="container-center">
-        <h3>Añadir Tratamiento</h3>
+    <div className="custom-container custom-container__md-main pt-4 px-4 pb-3 mb-5">
+      <div>
+        <h2 className="title text-center">Añadir Tratamiento</h2>
       </div>
 
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3, display: 'flex', flexDirection: 'column' }}>
@@ -128,7 +129,7 @@ function AddTreatment() {
           </Grid>
 
           <Grid item xs={12} sx={{ my: 2 }}>
-            <Divider sx={{ height: 1, bgcolor: 'grey' }} />
+            <Divider className="long-divider mb-4" />
           </Grid>
 
           <Grid item xs={12} sm={6}>
@@ -192,7 +193,7 @@ function AddTreatment() {
           </Grid>
 
           <Grid item xs={12} sx={{ my: 2 }}>
-            <Divider sx={{ height: 1, bgcolor: 'grey' }} />
+            <Divider className="long-divider mb-4" />
           </Grid>
 
           <Grid item xs={12}>
@@ -216,10 +217,10 @@ function AddTreatment() {
           </Grid>
         </Grid>
 
-        <div className="custom-button-display">
+        <div className="custom-container custom-container__button">
           <button
             type="submit"
-            className="btn btn-primary mt-3 custom-button">
+            className="custom-btn">
             Añadir Tratamiento
           </button>
         </div>

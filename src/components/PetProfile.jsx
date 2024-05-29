@@ -20,9 +20,10 @@ function PetProfile() {
   const [appointmentsData, setAppointmentsData] = useState([]);
   const [petData, setPetData] = useState({
     id: '',
-    chipNumber: '',
+    registrationNumber: '',
     name: '',
     birthDate: '',
+    sex: '',
     type: '',
     species: '',
     breed: '',
@@ -72,19 +73,39 @@ function PetProfile() {
 
 
   return (
-    <div className="custom-container custom-container__md-main pt-4 px-4">
+    <div className="custom-container custom-container__md-main pt-4 px-4 mb-5">
 
       <div className="mb-4 ">
         <div>
           <h2 className="title text-center">{petData.name}</h2>
         </div>
-        <div >
-          <p>Dueño: {clientName}</p>
-          <p>Número de chip: {petData.registrationNumber}</p>
-          <p>Fecha de nacimiento: {petData.birthDate}</p>
-          <span>Tipo: {petData.type}  </span>
-          <span>Especie:  {petData.species} </span>
-          <span >Raza: {petData.breed}</span>
+        <div className="grid mt-4 ">
+
+          <div className="row ">
+            <div className="col-12 col-lg-6">
+              <span className="fw-bold">Dueño:</span> {clientName}
+            </div>
+            <div className="col-12 col-lg-6 mt-2 mt-lg-0">
+              <span className="fw-bold">Identificador:</span> {petData.registrationNumber}
+            </div>
+          </div>
+          <div className="row mt-2">
+            <div className="col-12 col-md-6">
+              <span className="fw-bold">Nacimiento:</span> {new Date(petData.birthDate).toLocaleDateString()}
+            </div>
+            <div className="col-6 col-md-6 mt-2 ">
+              <span className="fw-bold">Sexo:</span> {petData.sex === "F" ? "Hembra" : "Macho"}
+            </div>
+            <div className="col-6 col-md-4 mt-2 ">
+              <span className="fw-bold">Tipo:</span> {petData.type}
+            </div>
+            <div className="col-6 col-md-4 mt-2 ">
+              <span className="fw-bold">Especie:</span> {petData.species}
+            </div>
+            <div className="col-6 col-md-4 mt-2 ">
+              <span className="fw-bold">Raza:</span> {petData.breed}
+            </div>
+          </div>
         </div>
       </div>
 

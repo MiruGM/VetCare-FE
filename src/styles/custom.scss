@@ -48,6 +48,11 @@ body {
         background-color: $gray-300;
         border-radius: 20px;
         padding: .2rem 0;
+
+        &__small-right {
+            margin-left: auto;
+            max-width: 40%;
+        }
     }
 }
 

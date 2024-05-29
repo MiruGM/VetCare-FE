@@ -18,9 +18,10 @@ function TreatmentHistory({ appointmentsData }) {
     });
   });
   console.log(formattedTreatments);
+
   //Paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const [treatmentsPerPage] = useState(1); // Cantidad de citas por página
+  const [treatmentsPerPage] = useState(2); // Cantidad de citas por página
 
   const indexOfLastTreatment = currentPage * treatmentsPerPage;
   const indexOfFirstTreatment = indexOfLastTreatment - treatmentsPerPage;
@@ -37,9 +38,29 @@ function TreatmentHistory({ appointmentsData }) {
   const handleOpenContainerClick = () => {
     setOpenContainer(!openContainer);
   };
+
+  //Función para obtener la clase de la motivo del tratamiento
+  const getReason = (reason) => {
+    switch (reason.toLowerCase()) {
+      case 'revisión':
+        return 'reason-rev';
+      case 'cirugía':
+        return 'reason-cir';
+      case 'vacunación':
+        return 'reason-vac';
+      case 'cura':
+        return 'reason-cur';
+      case 'muestras':
+        return 'reason-mue';
+      default:
+        return '';
+    }
+  };
+
   return (
-    <div className="">
-      <button className="custom-btn custom-btn__no-button" onClick={handleOpenContainerClick} >
+    <div className="d-flex flex-column">
+
+      <button className="custom-btn custom-btn__no-button mb-3" onClick={handleOpenContainerClick} >
         {
           openContainer ? (<>Cerrar Tratamientos</>) : (<>Mostrar Tratamientos</>)
         }
@@ -51,31 +72,65 @@ function TreatmentHistory({ appointmentsData }) {
         && (
 
           <div>
+
             <div>
-              <h2 className="text-center title mt-3">Historial de Tratamientos</h2>
+              <h2 className="text-center title mt-2">Historial de Tratamientos</h2>
             </div>
-            <div>
+
+            <div className="my-3">
               {
                 currentTreatments.map((dateAndTreatment) => (
-                  <div key={dateAndTreatment.id}>
-
+                  <div className="custom-list-style" key={dateAndTreatment.id}>
                     {
                       (dateAndTreatment.treatment !== null | undefined) && (
-                        <div >
-
-                          <div className="border m-1 p-2" key={dateAndTreatment.treatment.id}>
-                            <span>Fecha de aplicación del tratamiento: {dateAndTreatment.date}</span><br /><br />
-
-                            <span >Tipo de Tratamiento: {dateAndTreatment.treatment.reason}</span><br />
-                            <span >Nombre: {dateAndTreatment.treatment.name}</span><br />
-                            <span >Descripción: {dateAndTreatment.treatment.description}</span><br />
-                            <span >Duración de la intervención: {dateAndTreatment.treatment.duration}</span><br />
-                            <span >Frecuencia del tratamiento: {dateAndTreatment.treatment.reason}</span><br />
-                            <span >Medicación: {dateAndTreatment.treatment.meds}</span><br />
-                            <span >Necesidad de seguimiento: {dateAndTreatment.treatment.reason}</span><br />
-                            <span >Precio: {dateAndTreatment.treatment.price}</span><br />
+                        <div className="d-grid p-1" key={dateAndTreatment.treatment.id}>
+                          <div className="row">
+                            <div className={`col-6 custom-container custom-container__reason-pill uppercase ${getReason(dateAndTreatment.treatment.reason)}`}>
+                              <span>{dateAndTreatment.treatment.reason}</span>
+                            </div>
+                            <div className="col-6">
+                              <div className="custom-container custom-container__reason-pill">
+                                <span className="fw-bold">{new Date(dateAndTreatment.date).toLocaleDateString()}</span>
+                              </div>
+                            </div>
                           </div>
 
+                          <div className="row mt-3">
+                            <div className="col-12">
+                              <span className="overTitle">{dateAndTreatment.treatment.name}</span>
+
+                            </div>
+                            <div className="col-12 mt-2">
+                              <span >{dateAndTreatment.treatment.description}</span><br />
+                            </div>
+
+                            <div className="col-12 col-lg-6 mt-3">
+                              <span className="d-block fw-bold">Duración de la intervención:</span>
+                              <span className="d-block">{dateAndTreatment.treatment.duration}</span>
+                            </div>
+
+                            <div className="col-12 col-lg-6 mt-2">
+                              <span className="d-block fw-bold">Frecuencia del tratamiento:</span>
+                              <span className="d-block">{dateAndTreatment.treatment.frequency}</span>
+                            </div>
+
+                            <div className="col-12 col-lg-6 mt-2">
+                              <span className="d-block fw-bold">Medicación:</span>
+                              <span className="d-block">{dateAndTreatment.treatment.meds}</span>
+                            </div>
+
+
+                            <div className="col-12 col-lg-6 mt-2">
+                              <span className="fw-bold">Seguimiento:</span> {dateAndTreatment.treatment.followUp ? 'Sí' : 'No'}
+                            </div>
+
+                            <div className="col-12 mt-2">
+                              <div className="custom-container custom-container__reason-pill custom-container__reason-pill__small-right">
+                                <span className="fw-bold">{dateAndTreatment.treatment.price}€</span>
+                              </div>
+                            </div>
+
+                          </div>
                         </div>
                       )
                     }
@@ -85,16 +140,12 @@ function TreatmentHistory({ appointmentsData }) {
             </div>
 
             {formattedTreatments.length > treatmentsPerPage &&
-              <div className="container-center">
+              <div className="custom-container custom-container__center mb-2">
                 <Pagination
                   count={Math.ceil(formattedTreatments.length / treatmentsPerPage)}
                   page={currentPage}
                   onChange={handleChangePage}
-                  // color="primary"
-                  // size="small"
-                  // shape="rounded"
-                  className="pagination"
-                  siblingCount={2}
+
                 />
               </div>
             }

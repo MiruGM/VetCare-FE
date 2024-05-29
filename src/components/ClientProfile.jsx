@@ -272,7 +272,7 @@ function ClientProfile() {
                       <span className="fw-bold">{pet.type}</span>
                     </div>
                     <div className="col-6 col-lg-3">
-                      <span className="fw-bold">{pet.birthDate}</span>
+                      <span className="fw-bold">{new Date(pet.birthDate).toLocaleDateString()}</span>
                     </div>
 
                     <div className="col-12 col-sm-6 col-lg-3">

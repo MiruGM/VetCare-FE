@@ -162,13 +162,13 @@ function ListAppointments() {
               <li key={item.id} className="custom-list-style " >
                 <div className="d-grid p-1">
                   <div className="row">
-                    <div className="col-6">
-                      <div className={`custom-container custom-container__reason-pill uppercase ${getReason(item.reason)}`}>
-                        {item.reason}
-                      </div>
+                    <div className={`col-6 custom-container custom-container__reason-pill uppercase ${getReason(item.reason)}`}>
+                      <span>{item.reason}</span>
                     </div>
-                    <div className="col-6 custom-container custom-container__reason-pill">
-                      <span>{pets.find(pet => pet.id === item.petId)?.name}</span>
+                    <div className="col-6">
+                      <div className="custom-container custom-container__reason-pill">
+                        <span className="fw-bold">{pets.find(pet => pet.id === item.petId)?.name}</span>
+                      </div>
                     </div>
                   </div>
                   <div className="row mt-3">
@@ -178,7 +178,7 @@ function ListAppointments() {
                   </div>
                   <div className="row">
                     <div className="col-6 text-center">
-                      <span className="fw-bold">F:</span> {item.date}
+                      <span className="fw-bold">F:</span> {new Date(item.date).toLocaleDateString()}
                     </div>
                     <div className="col-6 text-center">
                       <span className="fw-bold">H:</span> {item.time?.slice(0, -3)}
@@ -231,7 +231,7 @@ function ListAppointments() {
                     {row.reason}
                   </div>
                 </td>
-                <td className="text-center">{row.date}</td>
+                <td className="text-center">{new Date(row.date).toLocaleDateString()}</td>
                 <td className="text-center">{row.time?.slice(0, -3)}</td>
                 <td className="text-center">
                   <button className="custom-btn" onClick={() => handleDelete(row.id)}><DeleteIcon /></button>

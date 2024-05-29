@@ -11,7 +11,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Divider from '@mui/material/Divider';
 import esLocale from "date-fns/locale/es";
 
-//TODO: Cambiar el alert por mun modal
+//TODO: Cambiar el alert por un modal
 //TODO: VALIDACIÓN DE DATOS
 //TODO: ARREGLAR/CAMBIAR EL DATEPICKER => error en la elección de la primera fecha
 
@@ -192,7 +192,7 @@ function AddPet() {
           </Grid>
 
           <Grid item xs={12} sx={{ my: 2 }}>
-            <Divider sx={{ height: 1, bgcolor: 'grey' }} />
+            <Divider className="long-divider mb-4" />
           </Grid>
 
           <Grid item xs={12}>

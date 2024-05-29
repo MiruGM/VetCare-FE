@@ -1,6 +1,7 @@
-import { useState } from "react";
+//TODO: TRATAR DE PONER EL NOMBRE DEL VETERINARIO EN LA CITA
 
 import { Pagination } from "@mui/material";
+import { useState } from "react";
 
 function AppointmentHistory({ isVet, navigate, appointmentsData }) {
 
@@ -12,9 +13,28 @@ function AppointmentHistory({ isVet, navigate, appointmentsData }) {
   const indexOfFirstAppointment = indexOfLastAppointment - appointmentsPerPage;
   const currentAppointments = appointmentsData.slice(indexOfFirstAppointment, indexOfLastAppointment);
 
+
   // Función para cambiar de página
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
+  };
+
+  //Función para el estilo de la cita
+  const getReason = (reason) => {
+    switch (reason.toLowerCase()) {
+      case 'revisión':
+        return 'reason-rev';
+      case 'cirugía':
+        return 'reason-cir';
+      case 'vacunación':
+        return 'reason-vac';
+      case 'cura':
+        return 'reason-cur';
+      case 'muestras':
+        return 'reason-mue';
+      default:
+        return '';
+    }
   };
 
   return (
@@ -28,30 +48,40 @@ function AppointmentHistory({ isVet, navigate, appointmentsData }) {
           {
             currentAppointments.map((appointment) => (
               <div className="custom-list-style" key={appointment.id}>
-                <span>Motivo de la Cita: {appointment.reason}  </span>
-                <span>Fecha: {appointment.date}, {appointment.time}</span><br />
-                <span>Atentido por: {appointment.veterinarianId}</span>
-                <p>
+                <div className={`custom-container custom-container__reason-pill uppercase ${getReason(appointment.reason)} mb-2`}>
+                  {appointment.reason}
+                </div>
+                <div className="grid">
+                  <div className="row">
+                    <div className="col-12 col-md-6">
+                      <span className="fw-bold">Fecha: {new Date(appointment.date).toLocaleDateString()}, {appointment.time}</span>
+                    </div>
+                    <div className="col-12 col-md-6">
+                      <span className="fw-bold">Atentido por:</span> {appointment.veterinarianId}
+                    </div>
+                  </div>
 
-                </p>
+                </div>
+
                 {
                   appointment.treatments.length !== 0
                   && (
 
-                    <div >
-                      <p>Tratamientos:
-                        {
-                          appointment.treatments.map((treatment) => (
-                            <span key={treatment.id}> {treatment.name},</span>
-                          ))
-                        }
-                      </p>
+                    <div>
+                      <span className="fw-bold">Tratamientos:</span>
+
+                      {
+                        appointment.treatments.map((treatment, index) => (
+                          <span key={index}> {treatment.name}{index !== appointment.treatments.length - 1 ? ', ' : ''}</span>
+                        ))
+                      }
+
                     </div>
                   )
                 }
                 {
                   isVet && (
-                    <div className="custom-container custom-container__button">
+                    <div className="custom-container custom-container__button mt-3">
                       <button
                         type="button"
                         onClick={() => { navigate('/addtreatment/' + appointment.id) }}
@@ -68,7 +98,7 @@ function AppointmentHistory({ isVet, navigate, appointmentsData }) {
 
 
         {appointmentsData.length > appointmentsPerPage &&
-          <div className="container-center">
+          <div className="custom-container custom-container__center mt-3 mb-4">
             <Pagination
               count={Math.ceil(appointmentsData.length / appointmentsPerPage)}
               page={currentPage}
