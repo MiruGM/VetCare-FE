@@ -255,12 +255,14 @@ function ClientProfile() {
 
         <div className="">
           {clientData.pets.length === 0 ? (
-            <p>No hay mascotas registradas</p>
+            <div className="d-flex justify-content-center mt-3">
+              <span className="fw-bold">No hay mascotas registradas</span>
+            </div>
           ) : (
 
             clientData.pets.map(pet =>
               <Link key={pet.id} to={`/petprofile/${pet.id}`}>
-                <div className="custom-list-style custom-list-style__clickable d-grid">
+                <div className="container custom-list-style custom-list-style__clickable">
                   <div className="row">
                     <div className="col-12">
                       <h5 className="overTitle text-center">{pet.name}</h5>

@@ -160,7 +160,7 @@ function ListAppointments() {
           {
             currentAppointments.map((item) => (
               <li key={item.id} className="custom-list-style " >
-                <div className="d-grid p-1">
+                <div className="container p-1">
                   <div className="row">
                     <div className={`col-6 custom-container custom-container__reason-pill uppercase ${getReason(item.reason)}`}>
                       <span>{item.reason}</span>

@@ -51,7 +51,7 @@ function AppointmentHistory({ isVet, navigate, appointmentsData }) {
                 <div className={`custom-container custom-container__reason-pill uppercase ${getReason(appointment.reason)} mb-2`}>
                   {appointment.reason}
                 </div>
-                <div className="grid">
+                <div className="container">
                   <div className="row">
                     <div className="col-12 col-md-6">
                       <span className="fw-bold">Fecha: {new Date(appointment.date).toLocaleDateString()}, {appointment.time}</span>

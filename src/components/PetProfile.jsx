@@ -79,9 +79,9 @@ function PetProfile() {
         <div>
           <h2 className="title text-center">{petData.name}</h2>
         </div>
-        <div className="grid mt-4 ">
+        <div className="container mt-4 ">
 
-          <div className="row ">
+          <div className="row">
             <div className="col-12 col-lg-6">
               <span className="fw-bold">Dueño:</span> {clientName}
             </div>

@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAuthStore } from '../hooks/useAuthStore';
+import useFetchClientByIdData from '../hooks/useFetchClientById';
+
 import { useNavigate } from "react-router-dom";
 
-import { peticionGET, peticionPOSTJSON } from '../utils/ajax';
+import { peticionPOSTJSON } from '../utils/ajax';
 
 import { TextField, Box, Grid, Select, MenuItem } from '@mui/material';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Divider from '@mui/material/Divider';
-import esLocale from "date-fns/locale/es";
+import { Alert, Divider } from '@mui/material';
+import BasicDatePicker from './Datepicker';
+import { format } from 'date-fns';
 
 //TODO: Cambiar el alert por un modal
 //TODO: VALIDACIÓN DE DATOS
@@ -18,9 +18,7 @@ import esLocale from "date-fns/locale/es";
 function AddPet() {
   const navigate = useNavigate();
   const { clientId } = useAuthStore();
-  const [pickedDate, setPickedDate] = useState(null);
-
-
+  const clientData = useFetchClientByIdData();
   const [petData, setPetData] = useState({
     registrationNumber: '',
     name: '',
@@ -31,34 +29,10 @@ function AddPet() {
     breed: '',
     clientId: clientId
   });
+  const [validFetch, setValidFetch] = useState(null);
 
-  const [clientData, setClientData] = useState({
-    id: '',
-    name: '',
-    email: '',
-    dni: '',
-    phone: '',
-    password: '',
-    pets: [],
-  });
+  const [datepickerValue, setDatepickerValue] = useState(null);
 
-  useEffect(() => {
-
-    async function fetchData() {
-      let params = new FormData();
-      params.append('user', "true");
-
-      let response = await peticionGET('clients/' + clientId, params);
-
-      if (response.ok) {
-        const data = response.data;
-        setClientData(data);
-      }
-    }
-
-    fetchData();
-
-  }, [clientId]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -68,62 +42,66 @@ function AddPet() {
     }));
   }
 
-  const handleDateChange = (event) => {
-    //Recojo el valor de la fecha desde datepicker
-    setPickedDate(event);
-    console.log('Fecha recogida: ', pickedDate);
-    //Formateo la fecha para que sea aceptada en el servidor: yyyy-mm-dd
-    //1. Creo un objeto Date con la fecha recogida
-    const date = new Date(pickedDate);
-    console.log('Fecha recogida: ', date);
-    //2. Rocorto con el formato deseado: 
-    const formattedDate = date.toISOString().split('T')[0];
-    console.log('Fecha formateada: ', formattedDate);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-    //Seteo la fecha en el objeto petData
+    //Formatear la fecha para la bd
+    const formattedDate = format(datepickerValue, 'yyyy-MM-dd');
+    console.log('Fecha formateada: ', formattedDate);
     setPetData(prevState => ({
       ...prevState,
       birthDate: formattedDate
     }));
-    console.log('handleDatechange: ', petData);
-  };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    // console.log('Fecha recogida de datepicker:', dateValue);
-
-    // //Recoger la fecha + 1 día para calcular correctamente la fecha de nacimiento desde Datepicker
-    // const date = new Date(dateValue);
-    // date.setDate(date.getDate() + 1);
-    // //Formatear la fecha para que sea aceptada por el servidor
-    // const dateValueFormatted = date.toISOString().split('T')[0];
-    // console.log('Fecha formateada:', dateValueFormatted);
-    // //Añadir la fecha al objeto petData
-    // handleDateChange(dateValueFormatted);
-
-    // console.log('Submit: ', petData);
-
-    //Petición POST para añadir la mascota
+    // Petición POST para añadir la mascota
     let response = await peticionPOSTJSON('pets', petData);
 
-    alert(response.message);
-
     if (response.ok) {
-      navigate("/");
+      setValidFetch(true);
+      setPetData({
+        registrationNumber: '',
+        name: '',
+        birthDate: '',
+        sex: 'M',
+        type: 'Mamífero',
+        species: '',
+        breed: '',
+        clientId: clientId
+      });
+      setTimeout(() => {
+        navigate("/clientprofile");
+      }, 2000);
+
+    } else {
+
+      setValidFetch(false);
     }
   };
 
+  console.log('PetData: ', petData);
+
   return (
     <div className="custom-container custom-container__md-main pt-4 px-4 pb-3">
-
       <div>
         <h2 className="title text-center">Añadir Mascota a {clientData.name.split(' ')[0]} {clientData.name.split(' ')[1]}</h2>
       </div>
 
+      {
+        validFetch === false
+          ? (
+            <div>
+              <Alert severity="error">Error al crear la mascota. Intentelo de nuevo.</Alert>
+            </div>)
+          : validFetch !== null && (
+            <div>
+              <Alert severity="success">Mascota creada correctamente.</Alert>
+            </div>)
+      }
+
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3, display: 'flex', flexDirection: 'column' }}>
 
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6}>
             <TextField
               required
               fullWidth
@@ -137,42 +115,6 @@ function AddPet() {
             // error={!isFieldsValid.email}
             // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
             />
-          </Grid>
-
-          <Grid item xs={12} sm={4}>
-            <LocalizationProvider dateAdapter={AdapterDateFns} locale={esLocale}>
-              <DatePicker
-                label="Fecha de Nacimiento"
-                inputFormat="dd-MM-yyyy"
-                value={pickedDate}
-                onChange={handleDateChange}
-                slotProps={{
-                  textField: { variant: 'outlined', fullWidth: true, required: true },
-                  toolbar: {
-                    toolbarFormat: "dd-MM-yyyy",
-                    hidden: false
-                  }
-                }}
-                autoFocus={true}
-              />
-            </LocalizationProvider>
-          </Grid>
-
-          <Grid item xs={12} sm={2}>
-            <Select
-              required
-              fullWidth
-              id="sex"
-              //label="Tipo"
-              name="sex"
-              value={petData.sex}
-              onChange={handleChange}
-            >
-              <MenuItem value={'M'}>Macho</MenuItem>
-              <MenuItem value={'H'}>Hembra</MenuItem>
-              <MenuItem value={'X'}>Indefinido</MenuItem>
-
-            </Select>
           </Grid>
 
           <Grid item xs={12} sm={6}>
@@ -189,6 +131,27 @@ function AddPet() {
             // error={!isFieldsValid.email}
             // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
             />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <BasicDatePicker datepickerValue={datepickerValue} setDatepickerValue={setDatepickerValue} />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <Select
+              required
+              fullWidth
+              id="sex"
+              //label="Tipo"
+              name="sex"
+              value={petData.sex}
+              onChange={handleChange}
+            >
+              <MenuItem value={'M'}>Macho</MenuItem>
+              <MenuItem value={'H'}>Hembra</MenuItem>
+              <MenuItem value={'X'}>Indefinido</MenuItem>
+
+            </Select>
           </Grid>
 
           <Grid item xs={12} sx={{ my: 2 }}>

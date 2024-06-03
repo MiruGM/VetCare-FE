@@ -118,22 +118,26 @@ body {
             background-color: $light;
         }
     }
+
+    &__selected {
+        background-color: darken($light, 10%);
+        border-color: $primary;
+
+        &:hover {
+            cursor: pointer;
+            background-color: darken($light, 5%);
+        }
+    }
 }
 
-
-
-// .custom-button-display {
-//     display: flex;
-
-// }
 
 //Personlización de los formularios
-.custom-textfield {
-    font-family: "Varela Round", sans-serif;
+// .custom-textfield {
+//     font-family: "Varela Round", sans-serif;
 
-    // background-color: #199ebc;
-    // border: 1px solid #dc3545;
-}
+//     // background-color: #199ebc;
+//     // border: 1px solid #dc3545;
+// }
 
 //Personalización de los botones
 .custom-btn {
@@ -209,6 +213,29 @@ body {
 
     &__important {
         background: $yellow-600;
+    }
+}
+
+.custom-chip {
+    background-color: $gray-300;
+    border-radius: 20px;
+    padding: 0.3rem 1rem;
+    margin: 0.2rem;
+    transition: color 0.3s, background-color 0.3s;
+
+    &:hover {
+        cursor: pointer;
+        background-color: darken($gray-300, 10%);
+    }
+
+    &__selected {
+        background-color: $primary;
+        color: $white;
+
+        &:hover {
+            cursor: pointer;
+            background-color: darken($primary, 10%);
+        }
     }
 }
 

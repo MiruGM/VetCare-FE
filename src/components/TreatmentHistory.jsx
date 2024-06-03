@@ -83,7 +83,7 @@ function TreatmentHistory({ appointmentsData }) {
                   <div className="custom-list-style" key={dateAndTreatment.id}>
                     {
                       (dateAndTreatment.treatment !== null | undefined) && (
-                        <div className="d-grid p-1" key={dateAndTreatment.treatment.id}>
+                        <div className="container p-1" key={dateAndTreatment.treatment.id}>
                           <div className="row">
                             <div className={`col-6 custom-container custom-container__reason-pill uppercase ${getReason(dateAndTreatment.treatment.reason)}`}>
                               <span>{dateAndTreatment.treatment.reason}</span>
