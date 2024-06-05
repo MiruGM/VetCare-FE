@@ -10,8 +10,6 @@ import { Box, Grid, TextField, IconButton, InputAdornment } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Divider from '@mui/material/Divider';
 
-//TODO: ARREGLAR LA PETICIÓN UPDATE/EDIT DEL CLIENTE
-//TODO: Arreglar la edición del pérfil -> da error en el servidor.
 //TODO: hacer la validación de los datos del formulario. 
 //TODO: ARREGLAR LOS ESTILOS DEL BOTÓN CANCELAR
 
@@ -69,20 +67,13 @@ function ClientProfile() {
     event.preventDefault();
 
     async function updateData() {
-      console.log(clientData.dni, clientData.name, clientData.email, clientData.phone, clientData.password)
-
-      let obj = new FormData();
-      obj.append('dni', clientData.dni);
-      obj.append('name', clientData.name);
-      obj.append('email', clientData.email);
-      obj.append('phone', clientData.phone);
-      obj.append('password', clientData.password);
-
-      // console.log('dni:', obj.get('dni'));
-      // console.log('name:', obj.get('name'));
-      // console.log('email:', obj.get('email'));
-      // console.log('phone:', obj.get('phone'));
-      // console.log('password:', obj.get('password'));
+      let obj = {
+        dni: clientData.dni,
+        name: clientData.name,
+        email: clientData.email,
+        phone: clientData.phone,
+        password: clientData.password
+      }
 
       let response = await peticionPUTJSON('clients/' + clientId, obj);
 
@@ -254,7 +245,7 @@ function ClientProfile() {
         </div>
 
         <div className="">
-          {clientData.pets.length === 0 ? (
+          {(clientData.pets === undefined || clientData.pets.length === 0) ? (
             <div className="d-flex justify-content-center mt-3">
               <span className="fw-bold">No hay mascotas registradas</span>
             </div>

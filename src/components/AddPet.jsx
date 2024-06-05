@@ -6,14 +6,13 @@ import { useNavigate } from "react-router-dom";
 
 import { peticionPOSTJSON } from '../utils/ajax';
 
-import { TextField, Box, Grid, Select, MenuItem } from '@mui/material';
-import { Alert, Divider } from '@mui/material';
+import { TextField, Box, Grid, Select, MenuItem, Divider } from '@mui/material';
 import BasicDatePicker from './Datepicker';
 import { format } from 'date-fns';
+import AlertMessage from './AlertMessage';
 
-//TODO: Cambiar el alert por un modal
 //TODO: VALIDACIÓN DE DATOS
-//TODO: ARREGLAR/CAMBIAR EL DATEPICKER => error en la elección de la primera fecha
+//TODO: Formato en español de datepicker
 
 function AddPet() {
   const navigate = useNavigate();
@@ -47,7 +46,6 @@ function AddPet() {
 
     //Formatear la fecha para la bd
     const formattedDate = format(datepickerValue, 'yyyy-MM-dd');
-    console.log('Fecha formateada: ', formattedDate);
     setPetData(prevState => ({
       ...prevState,
       birthDate: formattedDate
@@ -57,6 +55,7 @@ function AddPet() {
     let response = await peticionPOSTJSON('pets', petData);
 
     if (response.ok) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       setValidFetch(true);
       setPetData({
         registrationNumber: '',
@@ -73,30 +72,22 @@ function AddPet() {
       }, 2000);
 
     } else {
-
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       setValidFetch(false);
     }
   };
 
-  console.log('PetData: ', petData);
-
   return (
     <div className="custom-container custom-container__md-main pt-4 px-4 pb-3">
+
+      <AlertMessage
+        validFetch={validFetch}
+        errorMessage="Error al crear la mascota. Intentelo de nuevo."
+        successMessage="Mascota creada correctamente." />
+
       <div>
         <h2 className="title text-center">Añadir Mascota a {clientData.name.split(' ')[0]} {clientData.name.split(' ')[1]}</h2>
       </div>
-
-      {
-        validFetch === false
-          ? (
-            <div>
-              <Alert severity="error">Error al crear la mascota. Intentelo de nuevo.</Alert>
-            </div>)
-          : validFetch !== null && (
-            <div>
-              <Alert severity="success">Mascota creada correctamente.</Alert>
-            </div>)
-      }
 
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3, display: 'flex', flexDirection: 'column' }}>
 

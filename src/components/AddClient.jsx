@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 import { isValidDni, isValidEmail, isValidPhone } from "../utils/validators";
 
-import { Alert, Box, Grid, TextField } from '@mui/material';
+import { Box, Grid, TextField } from '@mui/material';
+import AlertMessage from './AlertMessage';
 //TODO: ARREGLAR LA VALIDACIÓN DEL CAMPO PHONE 
 
 function AddClient() {
@@ -37,11 +38,11 @@ function AddClient() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-
     if (validation(clientData)) {
       let response = await peticionPOSTJSON('clients', clientData);
 
       if (response.ok) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         setValidFetch(true);
         setClientData({
           dni: '',
@@ -55,7 +56,7 @@ function AddClient() {
         }, 2000);
 
       } else {
-
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         setValidFetch(false);
       }
     }
@@ -67,7 +68,7 @@ function AddClient() {
     let errors = { ...validationObj };
     let dni = data.dni.trim();
     let email = data.email.trim();
-    let phone = data.email.trim();
+    let phone = data.phone.trim();
 
     //Validar DNI 
     if (!isValidDni(dni)) {
@@ -87,14 +88,15 @@ function AddClient() {
       }
     }
 
-    //Validar teléfono
-    // if (!isValidPhone(phone)) {
-    //   valid = false;
-    //   errors = {
-    //     ...errors,
-    //     phone: false
-    //   }
-    // }
+    // Validar teléfono
+    if (!isValidPhone(phone)) {
+      valid = false;
+      errors = {
+        ...errors,
+        phone: false
+      }
+    }
+
     console.log(errors);
     //Validación final 
     if (!valid) {
@@ -106,30 +108,34 @@ function AddClient() {
     return valid;
   }
 
-  console.log(clientData);
-
   return (
     <div className="custom-container custom-container__md-main pt-4 px-4 pb-3">
+
+      <AlertMessage
+        validFetch={validFetch}
+        errorMessage="Error al crear el cliente. Intentelo de nuevo."
+        successMessage="Cliente creado correctamente." />
 
       <div>
         <h2 className="title text-center">Alta de Cliente</h2>
       </div>
 
-      {
-        validFetch === false
-          ? (
-            <div>
-              <Alert severity="error">Error al crear el cliente. Intentelo de nuevo.</Alert>
-            </div>)
-          : validFetch !== null && (
-            <div>
-              <Alert severity="success">Cliente creado correctamente.</Alert>
-            </div>)
-      }
-
       <div className="mx-md-5">
         <Box component="form" name="form" onSubmit={handleSubmit} sx={{ mt: 3, display: 'flex', flexDirection: 'column' }}>
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="name"
+                label="Nombre"
+                name="name"
+                type="text"
+                value={clientData.name}
+                onChange={handleChange}
+              />
+            </Grid>
+
             <Grid item xs={12}>
               <TextField
                 required
@@ -146,18 +152,7 @@ function AddClient() {
               />
             </Grid>
 
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="name"
-                label="Nombre"
-                name="name"
-                type="text"
-                value={clientData.name}
-                onChange={handleChange}
-              />
-            </Grid>
+
 
             <Grid item xs={12}>
               <TextField

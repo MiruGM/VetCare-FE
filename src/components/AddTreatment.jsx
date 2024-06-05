@@ -58,8 +58,6 @@ function AddTreatment() {
 
     let response = await peticionPOSTJSON('treatments', treatmentData);
 
-    alert(response.message);
-
     if (response.ok) {
       navigate("/");
     }

@@ -11,9 +11,11 @@ import { peticionDELETE } from "../utils/ajax";
 //TODO: ARREGLAR EL REFRESCO DE LA PÁGINA AL ELIMINAR UNA CITA
 
 function ListAppointments() {
-  let appointments = useFetchAllAppointments();
+  const [reload, setReload] = useState(false);
+  let appointments = useFetchAllAppointments({ reload });
   const pets = useFetchAllPetsData();
   const vets = useFetchAllVetsData();
+
 
   //Calcular y eliminar las citas pasadas. 
   function getDates() {
@@ -83,29 +85,25 @@ function ListAppointments() {
 
   //Eliminar cita
   const handleDelete = (appointmentId) => {
-    console.log(appointmentId);
-    console.log(basicModal);
-
     toggleOpen();
     setSelectedAppointmentId(appointmentId);
-
   };
 
   const confirmDelete = async () => {
-    console.log('Eliminar cita con id: ', selectedAppointmentId);
-
     let response = await peticionDELETE("appointments/" + selectedAppointmentId);
 
     if (response.ok) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       setResponseOk(true);
       toggleOpen();
-
       setAlert(true);
+      setReload(!reload);
       setTimeout(() => {
         setAlert(false);
       }, 3000);
 
     } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       setResponseOk(false);
       toggleOpen();
       setAlert(true);
@@ -114,8 +112,6 @@ function ListAppointments() {
       }, 3000);
 
     }
-
-
   };
 
   return (
@@ -129,6 +125,16 @@ function ListAppointments() {
         onConfirm={confirmDelete}
       />
 
+      {
+        alert && (responseOk
+          ? (<div className="mb-3 px-5">
+            <Alert severity="success">Cita eliminada correctamente.</Alert>
+          </div>)
+          : (<div className="mb-3 px-5">
+            <Alert severity="error">Error al eliminar la cita.</Alert>
+          </div>))
+      }
+
       <div>
         <h2 className="title text-center">Listado de Citas</h2>
       </div>
@@ -140,19 +146,7 @@ function ListAppointments() {
           placeholder="Busca un veterinario"
           value={filterChange}
           onChange={(e) => setFilterChange(e.target.value)} />
-
-        {
-          alert && (responseOk
-            ? (<div className="mt-3">
-              <Alert severity="success">Cita eliminada correctamente.</Alert>
-            </div>)
-            : (<div className="mt-3">
-              <Alert severity="error">Error al eliminar la cita.</Alert>
-            </div>))
-        }
       </div>
-
-
 
       {/* Este div es para móvil => LISTA */}
       <div className="d-block d-md-none mx-3">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { peticionGET } from "../utils/ajax";
 
-function useFetchAllAppointments() {
+function useFetchAllAppointments({ reload }) {
 	const [appointments, setAppointments] = useState([]);
 	useEffect(() => {
 		async function fetchData() {
@@ -17,7 +17,7 @@ function useFetchAllAppointments() {
 		}
 
 		fetchData();
-	}, []);
+	}, [reload]);
 	return appointments;
 
 }

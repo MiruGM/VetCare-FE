@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { isValidEmail, isValidPassword } from "../utils/validators";
 
 import { Box, Grid, TextField, IconButton, InputAdornment, Alert } from '@mui/material';
-import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import AlertMessage from "./AlertMessage";
 
 function Login() {
   const { setIsAuthenticated, setIsVet, setClientId } = useAuthStore();
@@ -46,20 +46,26 @@ function Login() {
       let response = await peticionPOSTJSON("login", oLogin);
 
       if (response.ok && response.message === "Veterinario logueado") {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         setIsAuthenticated(true);
         setIsVet(true);
         setValidFetch(true);
-        navigate("/listclients");
+        setTimeout(() => {
+          navigate("/listclients");
+        }, 2000);
       } else if (response.ok && response.message === "Cliente logueado") {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         setIsAuthenticated(true);
         setIsVet(false);
         setClientId(response.data.id);
         setValidFetch(true);
-        navigate("/clientprofile");
+        setTimeout(() => {
+          navigate("/clientprofile");
+        }, 2000);
       } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         setValidFetch(false);
       }
-
     }
   };
 
@@ -102,18 +108,15 @@ function Login() {
 
   return (
     <div className="container custom-container custom-container__login custom-container__md-main mb-3">
+
+      <AlertMessage
+        validFetch={validFetch}
+        errorMessage="Error en el correo o la contraseña. Por favor compruebe sus credenciales."
+        successMessage="Login correcto. Redireccionando." />
+
       <div>
         <h2 className="title text-center">Iniciar Sesión</h2>
       </div>
-      {
-        validFetch === false && (
-          <div className="mt-3">
-            <Alert severity="error">Error en el correo o la contraseña. Por favor compruebe sus credenciales.</Alert>
-          </div>
-
-
-        )
-      }
 
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3, display: 'flex', flexDirection: 'column' }}>
 

@@ -17,7 +17,6 @@ function TreatmentHistory({ appointmentsData }) {
       formattedTreatments.push(formattedAppointment);
     });
   });
-  console.log(formattedTreatments);
 
   //Paginación
   const [currentPage, setCurrentPage] = useState(1);

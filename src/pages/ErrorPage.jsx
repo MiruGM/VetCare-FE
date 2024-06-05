@@ -4,7 +4,6 @@ import { MDBBtn } from 'mdb-react-ui-kit';
 
 export default function ErrorPage() {
     const error = useRouteError();
-    console.log(error);
 
     return (
         <div className="container d-flex flex-column justify-content-center align-items-center mt-5 pt-5">

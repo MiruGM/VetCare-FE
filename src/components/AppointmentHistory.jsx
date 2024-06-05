@@ -57,40 +57,58 @@ function AppointmentHistory({ isVet, navigate, appointmentsData }) {
                       <span className="fw-bold">Fecha: {new Date(appointment.date).toLocaleDateString()}, {appointment.time}</span>
                     </div>
                     <div className="col-12 col-md-6">
-                      <span className="fw-bold">Atentido por:</span> {appointment.veterinarianId}
+                      <span className="fw-bold">Atendido por:</span> {appointment.veterinarianId}
                     </div>
+
+                    {
+                      appointment.treatments.length !== 0
+                      && (
+
+                        <div className="col-12">
+                          <span className="fw-bold">Tratamientos:</span>
+
+                          {
+                            appointment.treatments.map((treatment, index) => (
+                              <span key={index}> {treatment.name}{index !== appointment.treatments.length - 1 ? ', ' : ''}</span>
+                            ))
+                          }
+
+                        </div>
+                      )
+                    }
                   </div>
 
                 </div>
 
-                {
-                  appointment.treatments.length !== 0
-                  && (
 
-                    <div>
-                      <span className="fw-bold">Tratamientos:</span>
 
-                      {
-                        appointment.treatments.map((treatment, index) => (
-                          <span key={index}> {treatment.name}{index !== appointment.treatments.length - 1 ? ', ' : ''}</span>
-                        ))
-                      }
+                <div className="custom-container custom-container__button mt-3">
+                  {
+                    isVet && (
 
-                    </div>
-                  )
-                }
-                {
-                  isVet && (
-                    <div className="custom-container custom-container__button mt-3">
                       <button
                         type="button"
                         onClick={() => { navigate('/addtreatment/' + appointment.id) }}
                         className="custom-btn custom-btn__clear">
                         Añadir Tratamiento
                       </button>
-                    </div>
-                  )
-                }
+
+                    )
+                  }
+                  {
+                    appointment.date > new Date().toISOString() && (
+                      <button
+                        type="button"
+                        onClick={() => { navigate('/addtreatment/' + appointment.id) }}
+                        className="custom-btn custom-btn__soft mt-2 mt-md-0">
+                        Borrar Cita
+                      </button>
+                    )
+                  }
+
+
+                </div>
+
               </div>
             ))
           }
@@ -103,16 +121,11 @@ function AppointmentHistory({ isVet, navigate, appointmentsData }) {
               count={Math.ceil(appointmentsData.length / appointmentsPerPage)}
               page={currentPage}
               onChange={handleChangePage}
-              // color="primary"
-              // size="small"
-              // shape="rounded"
               className="pagination"
               siblingCount={2}
             />
           </div>
         }
-
-
       </div>
     </div>
   );

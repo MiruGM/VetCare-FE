@@ -72,8 +72,6 @@ async function peticionPUT(url, obj) {
     //Crear la ruta completa 
     let oURL = new URL(rutaBackend);
     oURL.pathname += url;
-    console.log(obj);
-    console.log(JSON.stringify(obj))
 
     //Hacer la petición AJAX con el método fetch.
     let serverResponse = await fetch(oURL, {
