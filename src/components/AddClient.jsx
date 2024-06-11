@@ -6,7 +6,6 @@ import { isValidDni, isValidEmail, isValidPhone } from "../utils/validators";
 
 import { Box, Grid, TextField } from '@mui/material';
 import AlertMessage from './AlertMessage';
-//TODO: ARREGLAR LA VALIDACIÓN DEL CAMPO PHONE 
 
 function AddClient() {
   const navigate = useNavigate();

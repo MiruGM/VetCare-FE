@@ -8,7 +8,7 @@ import { useAuthStore } from '../hooks/useAuthStore';
 
 function Home() {
 
-  const { isAuthenticated, isVet } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
 
   return (
     <>
@@ -25,7 +25,7 @@ function Home() {
         )
       }
 
-      <Menu isAuthenticated={isAuthenticated} isVet={isVet} />
+      <Menu />
       <div>
         <Outlet className="container d-flex justify-content-center align-items-center vh-100" />
       </div>

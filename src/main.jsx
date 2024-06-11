@@ -1,13 +1,12 @@
 //TODO: REGULAR LAS RUTAS
+//TODO: CAMBIAR LA RUTA DE PET Y APPINTMET PARA QUE NO SAQUEN EL ID
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import './styles/custom.scss';
 
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-// import { CustomProvider } from './components/Context';
 
-// import { useAuthStore } from './hooks/useAuthStore';
 // import { Navigate } from 'react-router-dom';
 
 import Home from './pages/Home';
@@ -20,12 +19,17 @@ import SearchClients from './components/SearchClient';
 import AddClient from './components/AddClient';
 import ClientProfile from './components/ClientProfile';
 
+import AddVet from './components/AddVet';
+import ListVets from './components/ListVets';
+import VetProfile from './components/VetProfile';
+
 import AddPet from './components/AddPet';
 import PetProfile from './components/PetProfile';
 import AddTreatment from './components/AddTreatment';
 
 import AddAppointment from './components/AddAppointment';
 import ListAppointment from './components/ListAppointments';
+
 
 // const PrivateRoute = ({ element: Element, ...rest }) => {
 //   console.log(isAuthenticated);
@@ -83,11 +87,11 @@ const router = createBrowserRouter([
         element: <AddPet />,
       },
       {
-        path: "petprofile/:petId",
+        path: "petprofile",
         element: <PetProfile />,
       },
       {
-        path: "addtreatment/:appointmentId",
+        path: "addtreatment",
         element: <AddTreatment />,
       },
       {
@@ -98,7 +102,18 @@ const router = createBrowserRouter([
         path: "listappointment",
         element: <ListAppointment />,
       },
-      //TODO: Add more routes here
+      {
+        path: "addvet",
+        element: <AddVet />,
+      },
+      {
+        path: "listvets",
+        element: <ListVets />,
+      },
+      {
+        path: "vetprofile",
+        element: <VetProfile />,
+      },
     ]
   }
 ]);

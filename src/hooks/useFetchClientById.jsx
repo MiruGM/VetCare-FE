@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { peticionGET } from "../utils/ajax";
 import { useAuthStore } from '../hooks/useAuthStore';
 
-
 function useFetchClientByIdData() {
     const [clientData, setClientData] = useState({
         id: '',

@@ -1,7 +1,7 @@
 //Modificar Bootstrap
 $primary: #199ebc;
 $secondary: #4bdfd9;
-$danger: #dc3545;
+$danger: #e46370;
 $success: #28a745;
 $info: #304562;
 $light: #f5f6f7;
@@ -130,15 +130,6 @@ body {
     }
 }
 
-
-//Personlización de los formularios
-// .custom-textfield {
-//     font-family: "Varela Round", sans-serif;
-
-//     // background-color: #199ebc;
-//     // border: 1px solid #dc3545;
-// }
-
 //Personalización de los botones
 .custom-btn {
     background-color: $primary;
@@ -171,6 +162,10 @@ body {
 
     &__soft {
         background-color: $gray-500;
+
+        &:hover {
+            background-color: $danger;
+        }
     }
 
     &__no-button {
@@ -185,6 +180,11 @@ body {
             background-color: $light;
         }
     }
+}
+
+//Personalización de los inputs
+.form-control {
+    max-width: 100%;
 }
 
 //Personalización de los divisores
@@ -254,8 +254,6 @@ a {
         color: lighten($primary, 10%);
     }
 }
-
-
 
 //Estilo del título/textos
 .brand-title {
@@ -356,56 +354,12 @@ a {
             border-radius: 0px 0px 30px 30px;
         }
 
-        // &__md-button {
-        //     display: flex;
-        //     flex: 1;
-
-        //     & button {
-        //         flex: 1;
-        //         width: 100%;
-        //     }
-        // }
     }
 
-
-    // .custom-button {
-    //     width: 30%;
-    // }
-
-
-
-    // .custom-center-container-md-login {
-    //     max-width: 550px;
-    //     margin-right: auto;
-    //     margin-left: auto;
-    //     background-color: rgb(255, 255, 255);
-    //     padding: 3rem;
-    //     margin-top: 5rem;
-    //     border-radius: 10px;
-    //     box-shadow: 0 0 10px rgba(47, 18, 18, 0.3);
-    // }
-
-    // .custom-center-container-md-table {
-    //     max-width: 830px;
-    //     margin-right: auto;
-    //     margin-left: auto;
-    //     background-color: rgb(255, 255, 255);
-    //     padding: 3rem;
-    //     margin-top: 5rem;
-    //     border-radius: 10px;
-    //     box-shadow: 0 0 10px rgba(47, 18, 18, 0.3);
-    // }
-
-    // .custom-center-container-md {
-    //     max-width: 730px;
-    //     margin-right: auto;
-    //     margin-left: auto;
-    //     background-color: rgb(255, 255, 255);
-    //     padding: 3rem;
-    //     margin-top: 5rem;
-    //     border-radius: 10px;
-    //     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    // }
+    //Personalización de los inputs
+    .form-control {
+        max-width: 50%;
+    }
 
 }
 

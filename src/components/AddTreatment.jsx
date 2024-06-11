@@ -1,7 +1,8 @@
 //TODO: VALIDACIONES DE LOS CAMPOS
 import { useState } from "react";
-import { useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from '../hooks/useAuthStore';
+
 
 import { peticionPOSTJSON } from "../utils/ajax";
 
@@ -16,15 +17,17 @@ import {
   Divider,
   InputAdornment
 } from "@mui/material";
-
+import AlertMessage from "./AlertMessage";
 
 
 function AddTreatment() {
   const navigate = useNavigate();
-  const { appointmentId } = useParams();
+  const { appointmentId } = useAuthStore();
 
+  // const { appointmentId } = useParams();
+
+  const [validFetch, setValidFetch] = useState(null);
   const [checked, setChecked] = useState(false);
-
   const [treatmentData, setTreatmentData] = useState({
     reason: 'Revisión',
     name: '',
@@ -36,6 +39,7 @@ function AddTreatment() {
     followUp: 0,
     appointmentId: appointmentId
   });
+
 
   const handleCheckChange = (event) => {
     setChecked(event.target.checked);
@@ -59,13 +63,35 @@ function AddTreatment() {
     let response = await peticionPOSTJSON('treatments', treatmentData);
 
     if (response.ok) {
-      navigate("/");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setValidFetch(true);
+      setTreatmentData({
+        reason: 'Revisión',
+        name: '',
+        description: '',
+        duration: '',
+        meds: '',
+        frequency: '',
+        price: 0,
+        followUp: 0,
+        appointmentId: appointmentId
+      });
+
+      setTimeout(() => {
+        navigate("/petprofile");
+      }, 1500);
     }
 
   };
 
   return (
     <div className="custom-container custom-container__md-main pt-4 px-4 pb-3 mb-5">
+
+      <AlertMessage
+        validFetch={validFetch}
+        errorMessage="Error al crear el tratamiento. Intentelo de nuevo."
+        successMessage="Tratamiento creado correctamente." />
+
       <div>
         <h2 className="title text-center">Añadir Tratamiento</h2>
       </div>

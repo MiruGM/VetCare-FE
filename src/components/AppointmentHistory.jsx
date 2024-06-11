@@ -1,9 +1,16 @@
-//TODO: TRATAR DE PONER EL NOMBRE DEL VETERINARIO EN LA CITA
-
-import { Pagination } from "@mui/material";
+import { peticionDELETE } from "../utils/ajax";
+import { getReason } from '../utils/constants';
 import { useState } from "react";
+import AlertModal from "./AlertModal";
+import useFetchAllVetsData from "../hooks/useFetchAllVets";
+import { useAuthStore } from "../hooks/useAuthStore";
+import { Pagination } from "@mui/material";
 
-function AppointmentHistory({ isVet, navigate, appointmentsData }) {
+function AppointmentHistory({ isVet, navigate, appointmentsData, setAlert, setResponseOk, reload, setReload }) {
+  const { setAppointmentId } = useAuthStore();
+
+  //Recojo todos los veterinarios
+  const vets = useFetchAllVetsData({ reload: true });
 
   //Paginación
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,32 +20,65 @@ function AppointmentHistory({ isVet, navigate, appointmentsData }) {
   const indexOfFirstAppointment = indexOfLastAppointment - appointmentsPerPage;
   const currentAppointments = appointmentsData.slice(indexOfFirstAppointment, indexOfLastAppointment);
 
-
   // Función para cambiar de página
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
   };
 
-  //Función para el estilo de la cita
-  const getReason = (reason) => {
-    switch (reason.toLowerCase()) {
-      case 'revisión':
-        return 'reason-rev';
-      case 'cirugía':
-        return 'reason-cir';
-      case 'vacunación':
-        return 'reason-vac';
-      case 'cura':
-        return 'reason-cur';
-      case 'muestras':
-        return 'reason-mue';
-      default:
-        return '';
+  //Manejar el click en añadir tratamiento
+  const handleAddTreatmentClick = (appointmentId) => {
+    setAppointmentId(appointmentId);
+    navigate('/addtreatment');
+  };
+
+  //Manejar el modal de confirmación 
+  const [basicModal, setBasicModal] = useState(false);
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
+
+  const toggleOpen = () => setBasicModal(!basicModal);
+
+  //Eliminar cita
+  const handleDelete = (appointmentId) => {
+    toggleOpen();
+    setSelectedAppointmentId(appointmentId);
+  };
+
+  const confirmDelete = async () => {
+    let response = await peticionDELETE("appointments/" + selectedAppointmentId);
+
+    if (response.ok) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setResponseOk(true);
+      toggleOpen();
+      setAlert(true);
+      setReload(!reload);
+      setTimeout(() => {
+        setAlert(false);
+      }, 3000);
+
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setResponseOk(false);
+      toggleOpen();
+      setAlert(true);
+      setTimeout(() => {
+        setAlert(false);
+      }, 3000);
+
     }
   };
 
   return (
     <div className="mb-4 mt-4">
+      <AlertModal
+        basicModal={basicModal}
+        setBasicModal={setBasicModal}
+        toggleOpen={toggleOpen}
+        title="Eliminar Cita"
+        text="¿Estás seguro que deseas eliminar esta cita?"
+        onConfirm={confirmDelete}
+      />
+
       <div>
         <h2 className="title text-center">Historial de Citas</h2>
       </div>
@@ -57,7 +97,12 @@ function AppointmentHistory({ isVet, navigate, appointmentsData }) {
                       <span className="fw-bold">Fecha: {new Date(appointment.date).toLocaleDateString()}, {appointment.time}</span>
                     </div>
                     <div className="col-12 col-md-6">
-                      <span className="fw-bold">Atendido por:</span> {appointment.veterinarianId}
+                      <span className="fw-bold">Atendido por:</span>
+                      {
+                        vets.map((vet, index) => (
+                          vet.id === appointment.veterinarianId && <span key={index}> {vet.name}</span>
+                        ))
+                      }
                     </div>
 
                     {
@@ -80,15 +125,13 @@ function AppointmentHistory({ isVet, navigate, appointmentsData }) {
 
                 </div>
 
-
-
                 <div className="custom-container custom-container__button mt-3">
                   {
                     isVet && (
 
                       <button
                         type="button"
-                        onClick={() => { navigate('/addtreatment/' + appointment.id) }}
+                        onClick={() => handleAddTreatmentClick(appointment.id)}
                         className="custom-btn custom-btn__clear">
                         Añadir Tratamiento
                       </button>
@@ -99,14 +142,12 @@ function AppointmentHistory({ isVet, navigate, appointmentsData }) {
                     appointment.date > new Date().toISOString() && (
                       <button
                         type="button"
-                        onClick={() => { navigate('/addtreatment/' + appointment.id) }}
+                        onClick={() => handleDelete(appointment.id)}
                         className="custom-btn custom-btn__soft mt-2 mt-md-0">
-                        Borrar Cita
+                        Eliminar Cita
                       </button>
                     )
                   }
-
-
                 </div>
 
               </div>

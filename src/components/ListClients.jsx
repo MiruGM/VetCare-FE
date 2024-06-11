@@ -9,6 +9,7 @@ import { Pagination, Tooltip } from "@mui/material";
 
 import PersonIcon from '@mui/icons-material/Person';
 import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
+
 import ClientInfo from './ClientInfo';
 
 
@@ -30,13 +31,14 @@ function ListClients() {
 
 
   return (
-    <div className="custom-container custom-container__md-main-table pt-4">
+    <div className="custom-container custom-container__md-main-table py-4 px-md-4">
       <div>
         <h2 className="title text-center">Listado de Clientes</h2>
       </div >
+
       {/* Este div es para móvil => LISTA */}
       <div className="d-block d-md-none" >
-        <ul className="list-group list-group-flush mt-3 mx-3">
+        <ul className="list-group list-group-flush m-3">
           {
             currentClients.map((client) => (
               <li key={client.id} className="custom-list-style" >
@@ -52,22 +54,10 @@ function ListClients() {
             ))
           }
         </ul>
-
-        {
-          clientList.length > clientsPerPage && (
-            <div className="custom-container custom-container__center mb-4">
-              <Pagination
-                count={Math.ceil(clientList.length / clientsPerPage)}
-                page={currentPage}
-                onChange={handleChangePage}
-              />
-            </div>
-          )
-        }
       </div >
 
       {/* Este div es para desktop => TABLA */}
-      <div className="d-none d-md-block p-3 m-3" >
+      <div className="d-none d-md-block" >
         <MDBTable className="custom-table">
           <MDBTableHead>
             <tr>
@@ -118,20 +108,19 @@ function ListClients() {
 
           </MDBTableBody>
         </MDBTable>
-        {
-          clientList.length > clientsPerPage && (
-            <div className="custom-container custom-container__center mb-4">
-              <div>
-                <Pagination
-                  count={Math.ceil(clientList.length / clientsPerPage)}
-                  page={currentPage}
-                  onChange={handleChangePage}
-                />
-              </div>
-            </div>
-          )
-        }
+
       </div >
+      {
+        clientList.length > clientsPerPage && (
+          <div className="custom-container custom-container__center ">
+            <Pagination
+              count={Math.ceil(clientList.length / clientsPerPage)}
+              page={currentPage}
+              onChange={handleChangePage}
+            />
+          </div>
+        )
+      }
     </div >
   )
 }

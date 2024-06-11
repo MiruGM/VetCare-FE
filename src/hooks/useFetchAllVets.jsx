@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { peticionGET } from "../utils/ajax";
 
-function useFetchAllVetsData() {
+function useFetchAllVetsData({ reload }) {
     const [vets, setVets] = useState([]);
 
     useEffect(() => {
@@ -18,7 +18,7 @@ function useFetchAllVetsData() {
         }
 
         fetchAllVetsData();
-    }, []);
+    }, [reload]);
 
     return vets;
 }

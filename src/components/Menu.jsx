@@ -20,19 +20,16 @@ import {
 import logo from '../styles/img/logo-vetcare.png'
 
 
-function Menu({ isAuthenticated, isVet }) {
+function Menu() {
   const [openBasic, setOpenBasic] = useState(false);
-  const { setIsAuthenticated, setIsVet } = useAuthStore();
-
+  const { isAuthenticated, isVet, isAdmin, logout } = useAuthStore();
+  console.log(isAdmin);
   const navigate = useNavigate();
 
   // Cerrar se sesión
   const handleLogout = () => {
-    // Seteo los valores a falso
-    setIsVet(false);
-    setIsAuthenticated(false);
-    //Limpio el localStorage
-    localStorage.clear()
+    // Limpiar el estado de autenticación
+    logout();
     // Navegar a la pagina de inicio
     navigate("/");
   };
@@ -70,6 +67,30 @@ function Menu({ isAuthenticated, isVet }) {
           <MDBCollapse navbar open={openBasic}>
             <MDBNavbarNav className='mr-auto mb-2 mb-lg-0 px-3'>
 
+              {
+                isAuthenticated && isVet && isAdmin && (
+                  <>
+                    <MDBNavbarItem>
+                      <MDBNavbarItem>
+                        <MDBDropdown>
+                          <MDBDropdownToggle tag='a' className='nav-link mt-lg-3' role='button'>
+                            Administración
+                          </MDBDropdownToggle>
+                          <MDBDropdownMenu>
+                            <MDBDropdownItem link>
+                              <Link to="addvet">Alta Veterinario</Link>
+                            </MDBDropdownItem>
+                            <MDBDropdownItem link>
+                              <Link to="listvets">Listado Veterinarios</Link>
+                            </MDBDropdownItem>
+                          </MDBDropdownMenu>
+                        </MDBDropdown>
+                      </MDBNavbarItem>
+                    </MDBNavbarItem>
+                  </>
+                )
+              }
+
               {isAuthenticated && isVet && (
                 <>
                   <MDBNavbarItem>
@@ -78,12 +99,12 @@ function Menu({ isAuthenticated, isVet }) {
                         Clientes
                       </MDBDropdownToggle>
                       <MDBDropdownMenu>
-                        <Link to="listclients">
-                          <MDBDropdownItem link>Listado de Clientes</MDBDropdownItem>
-                        </Link>
-                        <Link to="searchclients">
-                          <MDBDropdownItem link>Buscar Cliente</MDBDropdownItem>
-                        </Link>
+                        <MDBDropdownItem link>
+                          <Link to="listclients">Listado de Clientes</Link>
+                        </MDBDropdownItem>
+                        <MDBDropdownItem link>
+                          <Link to="searchclients">Buscar Cliente</Link>
+                        </MDBDropdownItem>
                       </MDBDropdownMenu>
                     </MDBDropdown>
                   </MDBNavbarItem>
@@ -94,12 +115,9 @@ function Menu({ isAuthenticated, isVet }) {
                         Registros
                       </MDBDropdownToggle>
                       <MDBDropdownMenu>
-                        <Link to="addclient">
-                          <MDBDropdownItem link>Alta de cliente</MDBDropdownItem>
-                        </Link>
-                        <Link to="addtreatment">
-                          <MDBDropdownItem link>Alta de veterinario</MDBDropdownItem>
-                        </Link>
+                        <MDBDropdownItem link>
+                          <Link to="addclient">Alta de cliente</Link>
+                        </MDBDropdownItem>
                       </MDBDropdownMenu>
                     </MDBDropdown>
                   </MDBNavbarItem>
@@ -112,21 +130,23 @@ function Menu({ isAuthenticated, isVet }) {
                 </>
               )}
 
-              {isAuthenticated && !isVet && (
-                <>
-                  <MDBNavbarItem>
-                    <MDBNavbarLink className="mt-lg-3">
-                      <Link to="clientprofile">Mi Perfil</Link>
-                    </MDBNavbarLink>
-                  </MDBNavbarItem>
+              {
+                isAuthenticated && !isVet && (
+                  <>
+                    <MDBNavbarItem>
+                      <MDBNavbarLink className="mt-lg-3">
+                        <Link to="clientprofile">Mi Perfil</Link>
+                      </MDBNavbarLink>
+                    </MDBNavbarItem>
 
-                  <MDBNavbarItem>
-                    <MDBNavbarLink className="mt-lg-3">
-                      <Link to="addappointment">Agendar Cita</Link>
-                    </MDBNavbarLink>
-                  </MDBNavbarItem>
-                </>
-              )}
+                    <MDBNavbarItem>
+                      <MDBNavbarLink className="mt-lg-3">
+                        <Link to="addappointment">Agendar Cita</Link>
+                      </MDBNavbarLink>
+                    </MDBNavbarItem>
+                  </>
+                )
+              }
 
               <MDBNavbarItem className='ml-auto mb-2'>
                 {

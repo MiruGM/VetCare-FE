@@ -69,7 +69,7 @@ function AddPet() {
       });
       setTimeout(() => {
         navigate("/clientprofile");
-      }, 2000);
+      }, 1500);
 
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });

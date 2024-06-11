@@ -5,12 +5,13 @@ import { useNavigate } from "react-router-dom";
 
 import { isValidEmail, isValidPassword } from "../utils/validators";
 
-import { Box, Grid, TextField, IconButton, InputAdornment, Alert } from '@mui/material';
+import { Box, Grid, TextField, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import AlertMessage from "./AlertMessage";
 
 function Login() {
-  const { setIsAuthenticated, setIsVet, setClientId } = useAuthStore();
+  const navigate = useNavigate();
+  const { setIsAuthenticated, setIsVet, setIsAdmin, setClientId, setVetId } = useAuthStore();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,9 +23,6 @@ function Login() {
     password: true
   };
   const [isFieldsValid, setIsFieldsValid] = useState(validationObj);
-
-
-  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -49,10 +47,12 @@ function Login() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setIsAuthenticated(true);
         setIsVet(true);
+        setIsAdmin(response.data.admin);
+        setVetId(response.data.id);
         setValidFetch(true);
         setTimeout(() => {
           navigate("/listclients");
-        }, 2000);
+        }, 1500);
       } else if (response.ok && response.message === "Cliente logueado") {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setIsAuthenticated(true);
@@ -61,7 +61,7 @@ function Login() {
         setValidFetch(true);
         setTimeout(() => {
           navigate("/clientprofile");
-        }, 2000);
+        }, 1500);
       } else {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setValidFetch(false);

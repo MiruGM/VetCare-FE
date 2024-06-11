@@ -1,33 +1,44 @@
+import { peticionDELETE } from "../utils/ajax";
 import useFetchAllPetsData from "../hooks/useFetchAllPets";
 import useFetchAllVetsData from "../hooks/useFetchAllVets";
-import useFetchAllAppointments from "../hooks/useFetchAllAppointments";
+import useFetchAllAppointmentsAfterData from "../hooks/useFetchAppointmentsByDateAfter";
+import useFetchAllAppointmentsBeforeData from "../hooks/useFetchAppointmentsByDateBefore";
 import AlertModal from "./AlertModal";
+import { getReason } from '../utils/constants';
 
-import { Alert, Pagination } from "@mui/material";
+import { Alert, ButtonGroup, Button, Pagination } from "@mui/material";
 import { MDBTable, MDBTableBody, MDBTableHead } from "mdb-react-ui-kit";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { peticionDELETE } from "../utils/ajax";
-//TODO: ARREGLAR EL REFRESCO DE LA PÁGINA AL ELIMINAR UNA CITA
+
 
 function ListAppointments() {
-  const [reload, setReload] = useState(false);
-  let appointments = useFetchAllAppointments({ reload });
   const pets = useFetchAllPetsData();
-  const vets = useFetchAllVetsData();
+  const vets = useFetchAllVetsData({ reload: true });
+  const [selectedOption, setSelectedOption] = useState('option1');
 
+  //Regular las fechas que se muestran
+  let now = new Date();
+  let currentDate = now.toISOString().split('T')[0];
+  const [reload, setReload] = useState(false);
 
-  //Calcular y eliminar las citas pasadas. 
-  function getDates() {
+  const appointmentsAfterDate = useFetchAllAppointmentsAfterData({ reload, currentDate });
+  const appointmentsBeforeDate = useFetchAllAppointmentsBeforeData({ reload, currentDate });
 
-    let now = new Date();
-    let currentDate = now.toISOString().split('T')[0];
+  const [shownAppointments, setShownAppointments] = useState([]);
 
-    if (appointments.length > 0) {
-      appointments = appointments.filter((appointment) => appointment.date >= currentDate)
+  useEffect(() => {
+    if (selectedOption === 'option1') {
+      setShownAppointments(appointmentsAfterDate);
+    } else if (selectedOption === 'option2') {
+      setShownAppointments(appointmentsBeforeDate);
     }
+  }, [appointmentsAfterDate, appointmentsBeforeDate, selectedOption]);
+
+  //Manejo de botón 
+  const handleButtonChange = (optionValue) => {
+    setSelectedOption(optionValue);
   }
-  getDates();
 
   //Filtrado de veterinarios a partir del input
   const [filterChange, setFilterChange] = useState('');
@@ -35,11 +46,11 @@ function ListAppointments() {
   let filterAppByVets = [];
   if (!filterChange) {
 
-    filterAppByVets = appointments;
+    filterAppByVets = shownAppointments;
 
   } else {
 
-    filterAppByVets = appointments.filter((app) => {
+    filterAppByVets = shownAppointments.filter((app) => {
       let vetName = vets.find(vet => vet.id === app.veterinarianId)?.name
       return vetName.toLowerCase().includes(filterChange.toLowerCase());
     });
@@ -48,7 +59,7 @@ function ListAppointments() {
 
   //Paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const [appointmentsPerPage] = useState(10); //Cantidad de citas por página
+  const [appointmentsPerPage] = useState(8); //Cantidad de citas por página
 
   const indexOfLastAppointment = currentPage * appointmentsPerPage;
   const indexOfFirstAppointment = indexOfLastAppointment - appointmentsPerPage;
@@ -56,23 +67,6 @@ function ListAppointments() {
 
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
-  };
-
-  const getReason = (reason) => {
-    switch (reason.toLowerCase()) {
-      case 'revisión':
-        return 'reason-rev';
-      case 'cirugía':
-        return 'reason-cir';
-      case 'vacunación':
-        return 'reason-vac';
-      case 'cura':
-        return 'reason-cur';
-      case 'muestras':
-        return 'reason-mue';
-      default:
-        return '';
-    }
   };
 
   //Manejar el modal de confirmación
@@ -115,7 +109,7 @@ function ListAppointments() {
   };
 
   return (
-    <div className="custom-container custom-container__md-main-table pt-4">
+    <div className="custom-container custom-container__md-main-table py-4 px-md-4">
       <AlertModal
         basicModal={basicModal}
         setBasicModal={setBasicModal}
@@ -139,18 +133,69 @@ function ListAppointments() {
         <h2 className="title text-center">Listado de Citas</h2>
       </div>
 
-      <div className="mt-3 mx-5">
+      <div className="d-flex justify-content-center my-3 mx-5">
         <input
           type="text"
-          className="form-control"
+          className="form-control me-2"
           placeholder="Busca un veterinario"
           value={filterChange}
           onChange={(e) => setFilterChange(e.target.value)} />
+
+        <div>
+          <ButtonGroup
+            variant="contained"
+            aria-label="button group"
+            sx={{
+
+              fontFamily: 'M PLUS Rounded 1c',
+              boxShadow: '0',
+
+              '& .MuiButton-root': {
+              },
+              '& .MuiButton-contained': {
+                color: '#ffffff',
+                backgroundColor: '#199ebc',
+                border: '2px solid #199ebc',
+
+                '&:hover': {
+                  border: '2px solid #199ebc',
+                  backgroundColor: '#127389',
+                },
+              },
+              '& .MuiButton-outlined': {
+                border: '2px solid #199ebc',
+                color: '#199ebc',
+
+                '&:hover': {
+                  color: '#ffffff',
+                  backgroundColor: '#199ebc',
+                },
+              },
+            }}
+          >
+            <Button
+              onClick={() => handleButtonChange('option1')}
+              variant={selectedOption === 'option1' ? 'contained' : 'outlined'}
+            >
+              CITAS FUTURAS
+            </Button>
+            <Button
+              onClick={() => handleButtonChange('option2')}
+              variant={selectedOption === 'option2' ? 'contained' : 'outlined'}
+            >
+              CITAS PASADAS
+            </Button>
+
+          </ButtonGroup>
+        </div>
+
+
+
       </div>
 
       {/* Este div es para móvil => LISTA */}
-      <div className="d-block d-md-none mx-3">
-        <ul className="list-group list-group-flush mt-3">
+      <div className="d-block d-md-none">
+        <ul className="list-group list-group-flush m-3">
           {
             currentAppointments.map((item) => (
               <li key={item.id} className="custom-list-style " >
@@ -180,7 +225,7 @@ function ListAppointments() {
                   </div>
 
                   <div className="custom-container custom-container__button mt-3">
-                    <button className="custom-btn custom-btn__clear" onClick={() => handleDelete(item.id)}>Eliminar</button>
+                    <button className="custom-btn custom-btn__soft" onClick={() => handleDelete(item.id)}>Eliminar</button>
                   </div>
 
                 </div>
@@ -189,21 +234,10 @@ function ListAppointments() {
             ))
           }
         </ul>
-        {
-          filterAppByVets.length > appointmentsPerPage && (
-            <div className="custom-container custom-container__center mt-2 mb-4">
-              <Pagination
-                count={Math.ceil(filterAppByVets.length / appointmentsPerPage)}
-                page={currentPage}
-                onChange={handleChangePage}
-              />
-            </div>
-          )
-        }
       </div>
 
       {/* Este div es para desktop => TABLA */}
-      <div className="d-none d-md-block p-3 m-3">
+      <div className="d-none d-md-block">
         <MDBTable className="custom-table">
           <MDBTableHead>
             <tr>
@@ -228,26 +262,25 @@ function ListAppointments() {
                 <td className="text-center">{new Date(row.date).toLocaleDateString()}</td>
                 <td className="text-center">{row.time?.slice(0, -3)}</td>
                 <td className="text-center">
-                  <button className="custom-btn" onClick={() => handleDelete(row.id)}><DeleteIcon /></button>
+                  <button className="custom-btn custom-btn__soft" onClick={() => handleDelete(row.id)}><DeleteIcon /></button>
                 </td>
               </tr>
             ))}
 
           </MDBTableBody>
         </MDBTable>
-        {
-          filterAppByVets.length > appointmentsPerPage && (
-            <div className="custom-container custom-container__center">
-              <Pagination
-                count={Math.ceil(filterAppByVets.length / appointmentsPerPage)}
-                page={currentPage}
-                onChange={handleChangePage}
-              />
-            </div>
-          )
-        }
       </div>
-
+      {
+        filterAppByVets.length > appointmentsPerPage && (
+          <div className="custom-container custom-container__center">
+            <Pagination
+              count={Math.ceil(filterAppByVets.length / appointmentsPerPage)}
+              page={currentPage}
+              onChange={handleChangePage}
+            />
+          </div>
+        )
+      }
     </div>
   );
 }

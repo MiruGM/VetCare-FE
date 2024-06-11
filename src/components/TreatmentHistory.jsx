@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getReason } from '../utils/constants';
 
 import { Pagination } from "@mui/material";
 
@@ -8,9 +9,10 @@ function TreatmentHistory({ appointmentsData }) {
   const formattedTreatments = [];
 
   appointmentsData.forEach(appointment => {
-    appointment.treatments.forEach(treatment => {
+    appointment.treatments.forEach((treatment, index) => {
       const formattedAppointment = {
-        id: appointment.id,
+        id: `${appointment.id}-${index}`,
+        appointmentId: appointment.id,
         date: appointment.date,
         treatment: treatment
       };
@@ -20,7 +22,7 @@ function TreatmentHistory({ appointmentsData }) {
 
   //Paginación
   const [currentPage, setCurrentPage] = useState(1);
-  const [treatmentsPerPage] = useState(2); // Cantidad de citas por página
+  const [treatmentsPerPage] = useState(4); // Cantidad de citas por página
 
   const indexOfLastTreatment = currentPage * treatmentsPerPage;
   const indexOfFirstTreatment = indexOfLastTreatment - treatmentsPerPage;
@@ -36,24 +38,6 @@ function TreatmentHistory({ appointmentsData }) {
 
   const handleOpenContainerClick = () => {
     setOpenContainer(!openContainer);
-  };
-
-  //Función para obtener la clase de la motivo del tratamiento
-  const getReason = (reason) => {
-    switch (reason.toLowerCase()) {
-      case 'revisión':
-        return 'reason-rev';
-      case 'cirugía':
-        return 'reason-cir';
-      case 'vacunación':
-        return 'reason-vac';
-      case 'cura':
-        return 'reason-cur';
-      case 'muestras':
-        return 'reason-mue';
-      default:
-        return '';
-    }
   };
 
   return (

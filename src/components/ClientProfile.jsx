@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../hooks/useAuthStore';
-
 import { useNavigate } from "react-router-dom";
 
+// import useFetchClientByIdData from '../hooks/useFetchClientById';
 import { peticionGET, peticionPUTJSON } from '../utils/ajax';
 
 import { Box, Grid, TextField, IconButton, InputAdornment } from '@mui/material';
@@ -15,9 +15,10 @@ import Divider from '@mui/material/Divider';
 
 function ClientProfile() {
   const navigate = useNavigate();
-  const { isVet, clientId } = useAuthStore();
+  const { isVet, clientId, setPetId } = useAuthStore();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [editable, setEditable] = useState(false);
+  // const [clientData, setClientData] = useFetchClientByIdData();
   const [clientData, setClientData] = useState({
     id: '',
     name: '',
@@ -100,7 +101,7 @@ function ClientProfile() {
               )}
         </div>
 
-        <div className="">
+        <div>
 
           <Box component="form" onSubmit={handleSubmit} sx={{ padding: 1, display: 'flex', flexDirection: 'column' }}>
             <Grid container spacing={2}>
@@ -252,7 +253,7 @@ function ClientProfile() {
           ) : (
 
             clientData.pets.map(pet =>
-              <Link key={pet.id} to={`/petprofile/${pet.id}`}>
+              <Link key={pet.id} to={`/petprofile`} onClick={() => { setPetId(pet.id) }}>
                 <div className="container custom-list-style custom-list-style__clickable">
                   <div className="row">
                     <div className="col-12">

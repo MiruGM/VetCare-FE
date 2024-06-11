@@ -28,3 +28,9 @@ export const isValidChipNum = (chipNum) => {
     const regExpChipNum = /^\d{15}$/;
     return regExpChipNum.test(chipNum);
 }
+
+//Validación para el número de colegiado de los veterinarios
+export const isValidRegistrationNumber = (registrationNumber) => {
+    const regExpRegistrationNumber = /^\d{2}-\d{5}$/;
+    return regExpRegistrationNumber.test(registrationNumber);
+}
