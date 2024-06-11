@@ -48,7 +48,6 @@ function AddVet() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(veterinarianData);
 
     let response = await peticionPOSTJSON('veterinarians', veterinarianData);
 

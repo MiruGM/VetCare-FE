@@ -7,7 +7,7 @@ import './styles/custom.scss';
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-// import { Navigate } from 'react-router-dom';
+import ProtectedRoute from './utils/ProtectedRoutes';
 
 import Home from './pages/Home';
 import ErrorPage from './pages/ErrorPage';
@@ -31,24 +31,6 @@ import AddAppointment from './components/AddAppointment';
 import ListAppointment from './components/ListAppointments';
 
 
-// const PrivateRoute = ({ element: Element, ...rest }) => {
-//   console.log(isAuthenticated);
-//   return isAuthenticated ? <Element {...rest} /> : <Navigate to="/login" />;
-// };
-
-// function useIsAuthenticated() {
-//   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
-//   return isAuthenticated;
-// }
-
-// function useIsVet() {
-//   const isVet = useAuthStore(state => state.isVet);
-//   return isVet; 
-// }
-
-// const { isAuthenticated, isVet } = useAuthStore();
-
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -65,61 +47,56 @@ const router = createBrowserRouter([
       },
       {
         path: "clientprofile",
-        element: <ClientProfile />,
-        // element: isAuthenticated ? <ClientProfile /> : <Navigate to="/login" />,
-        // guard: PrivateRoute
+        element: <ProtectedRoute element={ClientProfile} requiredRole="general" />,
       },
       {
         path: "addclient",
-        element: <AddClient />,
-        // element: useIsAuthenticated && isVet ? <ClientProfile /> : <Navigate to="/login" />,
+        element: <ProtectedRoute element={AddClient} requiredRole="vet" />,
       },
       {
         path: "listclients",
-        element: <ListClients />,
+        element: <ProtectedRoute element={ListClients} requiredRole="vet" />,
       },
       {
         path: "searchclients",
-        element: <SearchClients />,
+        element: <ProtectedRoute element={SearchClients} requiredRole="vet" />,
       },
       {
         path: "addpet",
-        element: <AddPet />,
+        element: <ProtectedRoute element={AddPet} requiredRole="vet" />,
       },
       {
         path: "petprofile",
-        element: <PetProfile />,
+        element: <ProtectedRoute element={PetProfile} requiredRole="general" />,
       },
       {
         path: "addtreatment",
-        element: <AddTreatment />,
+        element: <ProtectedRoute element={AddTreatment} requiredRole="vet" />,
       },
       {
         path: "addappointment",
-        element: <AddAppointment />,
+        element: <ProtectedRoute element={AddAppointment} requiredRole="general" />,
       },
       {
         path: "listappointment",
-        element: <ListAppointment />,
+        element: <ProtectedRoute element={ListAppointment} requiredRole="vet" />,
       },
       {
         path: "addvet",
-        element: <AddVet />,
+        element: <ProtectedRoute element={AddVet} requiredRole="admin" />,
       },
       {
         path: "listvets",
-        element: <ListVets />,
+        element: <ProtectedRoute element={ListVets} requiredRole="admin" />,
       },
       {
         path: "vetprofile",
-        element: <VetProfile />,
+        element: <ProtectedRoute element={VetProfile} requiredRole="admin" />,
       },
     ]
   }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  // <React.StrictMode>
   <RouterProvider router={router} />
-  // </React.StrictMode>,
 )

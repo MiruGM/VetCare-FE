@@ -328,6 +328,12 @@ a {
     width: 29rem;
 }
 
+.error-img {
+    margin: 2rem;
+    max-width: 50%;
+}
+
+
 @media (min-width: 768px) {
     .custom-container {
 
@@ -360,6 +366,12 @@ a {
     .form-control {
         max-width: 50%;
     }
+
+    //Personalización de las imágenes
+    .error-img {
+        max-width: 30%;
+    }
+
 
 }
 

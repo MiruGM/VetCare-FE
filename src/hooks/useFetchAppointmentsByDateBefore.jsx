@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { peticionGET } from "../utils/ajax";
 
 function useFetchAllAppointmentsBeforeData({ reload, currentDate }) {
-    console.log()
     const [appointments, setAppointments] = useState([]);
     useEffect(() => {
         async function fetchAppByDateData() {

@@ -96,7 +96,6 @@ function AddClient() {
       }
     }
 
-    console.log(errors);
     //Validación final 
     if (!valid) {
       setIsFieldsValid(errors);

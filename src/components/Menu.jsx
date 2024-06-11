@@ -23,7 +23,6 @@ import logo from '../styles/img/logo-vetcare.png'
 function Menu() {
   const [openBasic, setOpenBasic] = useState(false);
   const { isAuthenticated, isVet, isAdmin, logout } = useAuthStore();
-  console.log(isAdmin);
   const navigate = useNavigate();
 
   // Cerrar se sesión

@@ -133,7 +133,7 @@ function ListAppointments() {
         <h2 className="title text-center">Listado de Citas</h2>
       </div>
 
-      <div className="d-flex justify-content-center my-3 mx-5">
+      <div className="d-block d-md-flex justify-content-center my-3 mx-5">
         <input
           type="text"
           className="form-control me-2"
@@ -141,7 +141,7 @@ function ListAppointments() {
           value={filterChange}
           onChange={(e) => setFilterChange(e.target.value)} />
 
-        <div>
+        <div className="d-flex justify-content-center mt-3 mt-md-0 ">
           <ButtonGroup
             variant="contained"
             aria-label="button group"
