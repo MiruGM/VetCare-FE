@@ -1,3 +1,4 @@
+//TODO: el cambio del solor del select no fufa
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from '../hooks/useAuthStore';
@@ -10,12 +11,12 @@ import {
   Grid,
   MenuItem,
   Select,
-  TextField,
   Checkbox,
   FormControlLabel,
   Divider,
   InputAdornment
 } from "@mui/material";
+import CustomTextField from "./CustomTextField";
 
 
 function AddTreatment() {
@@ -117,7 +118,7 @@ function AddTreatment() {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <TextField
+            <CustomTextField
               required
               fullWidth
               label="Nombre"
@@ -130,7 +131,7 @@ function AddTreatment() {
           </Grid>
 
           <Grid item xs={12}>
-            <TextField
+            <CustomTextField
               required
               fullWidth
               multiline
@@ -149,7 +150,7 @@ function AddTreatment() {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <TextField
+            <CustomTextField
               required
               fullWidth
               label="Duración"
@@ -162,7 +163,7 @@ function AddTreatment() {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <TextField
+            <CustomTextField
               required
               fullWidth
               label="Frecuencia"
@@ -175,7 +176,7 @@ function AddTreatment() {
           </Grid>
 
           <Grid item xs={12}>
-            <TextField
+            <CustomTextField
               required
               fullWidth
               label="Medicación"
@@ -190,7 +191,12 @@ function AddTreatment() {
           <Grid item xs={12}>
             <FormControlLabel
               control={<Checkbox
-                sx={{ "& .MuiSvgIcon-root": { fontSize: 24 } }}
+                sx={{
+                  "& .MuiSvgIcon-root": { fontSize: 24 },
+                  '&.Mui-checked': {
+                    color: '#199ebc',
+                  },
+                }}
                 checked={checked}
                 onChange={handleCheckChange}
               />}
@@ -204,7 +210,7 @@ function AddTreatment() {
           </Grid>
 
           <Grid item xs={12}>
-            <TextField
+            <CustomTextField
               required
               fullWidth
               label="Precio"

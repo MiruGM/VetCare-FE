@@ -19,7 +19,7 @@ function ClientInfo({ name, dni, phone, email, id, setClientId }) {
   };
 
   return (
-    <div className="custom-list-style">
+    <div>
       <div className="container">
 
         <div className="row">

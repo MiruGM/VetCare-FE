@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 import { peticionPOSTJSON } from '../utils/ajax';
 
-import { TextField, Box, Grid, Select, MenuItem, Divider } from '@mui/material';
-import BasicDatePicker from './Datepicker';
-import { format } from 'date-fns';
+import { Box, Grid, Select, MenuItem, Divider } from '@mui/material';
+
 import AlertMessage from './AlertMessage';
+import CustomTextField from './CustomTextField';
 
 
 function AddPet() {
@@ -28,7 +28,6 @@ function AddPet() {
   });
   const [validFetch, setValidFetch] = useState(null);
 
-  const [datepickerValue, setDatepickerValue] = useState(null);
 
   //Validaciones
   const validationObj = {
@@ -56,7 +55,6 @@ function AddPet() {
     } else {
       setIsFieldsValid(validationObj);
     }
-
     return valid;
   }
 
@@ -68,22 +66,10 @@ function AddPet() {
     }));
   }
 
-  const handleDateChange = (value) => {
-    setDatepickerValue(value);
-    //Formatear la fecha para la bd
-    const formattedDate = format(datepickerValue, 'yyyy-MM-dd');
-    //Setear la fecha 
-    setPetData(prevState => ({
-      ...prevState,
-      birthDate: formattedDate
-    }));
-
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!validation(petData)) {
+    if (validation(petData)) {
       let response = await peticionPOSTJSON('pets', petData);
 
       if (response.ok) {
@@ -110,7 +96,6 @@ function AddPet() {
     }
 
   };
-  console.log(petData);
   return (
     <div className="custom-container custom-container__md-main pt-4 px-4 pb-3">
 
@@ -127,7 +112,7 @@ function AddPet() {
 
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <TextField
+            <CustomTextField
               required
               fullWidth
               id="name"
@@ -140,7 +125,7 @@ function AddPet() {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <TextField
+            <CustomTextField
               required
               fullWidth
               id="registrationNumber"
@@ -151,15 +136,22 @@ function AddPet() {
               onChange={handleChange}
               inputProps={{ maxLength: 15 }}
               error={!isFieldsValid.registrationNumber}
-              helperText={!isFieldsValid.registrationNumber && 'Compruebe el formato del correo'}
+              helperText={!isFieldsValid.registrationNumber && 'Compruebe el formato. Ejemplo: 1234567891012154'}
             />
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            {/* //TODO: Cambiar el datepicker por un input de tipo date */}
-            <BasicDatePicker
-              datepickerValue={datepickerValue}
-              handleDateChange={handleDateChange}
+
+            <CustomTextField
+              required
+              fullWidth
+              id="birthDate"
+              label="Fecha de Nacimiento"
+              name="birthDate"
+              type="date"
+              value={petData.birthDate}
+              onChange={handleChange}
+              InputLabelProps={{ shrink: true }}
             />
           </Grid>
 
@@ -200,7 +192,7 @@ function AddPet() {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <TextField
+            <CustomTextField
               required
               fullWidth
               id="species"
@@ -213,7 +205,7 @@ function AddPet() {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <TextField
+            <CustomTextField
               required
               fullWidth
               id="breed"

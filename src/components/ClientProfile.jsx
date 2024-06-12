@@ -6,11 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { peticionGET, peticionPUTJSON } from '../utils/ajax';
 import { getButtonClass } from '../utils/constants';
 
-import { Box, Grid, TextField, IconButton, InputAdornment } from '@mui/material';
+import { Box, Grid, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Divider from '@mui/material/Divider';
 import { isValidEmail, isValidPassword, isValidPhone } from '../utils/validators';
 import AlertMessage from './AlertMessage';
+import CustomTextField from './CustomTextField';
 
 
 function ClientProfile() {
@@ -168,7 +169,7 @@ function ClientProfile() {
             <Grid container spacing={2}>
 
               <Grid item xs={12}>
-                <TextField
+                <CustomTextField
                   required
                   disabled
                   fullWidth
@@ -182,7 +183,7 @@ function ClientProfile() {
               </Grid>
 
               <Grid item xs={12}>
-                <TextField
+                <CustomTextField
                   required
                   disabled
                   fullWidth
@@ -196,7 +197,7 @@ function ClientProfile() {
               </Grid>
 
               <Grid item xs={12}>
-                <TextField
+                <CustomTextField
                   required
                   disabled
                   fullWidth
@@ -211,7 +212,7 @@ function ClientProfile() {
               </Grid>
 
               <Grid item xs={12}>
-                <TextField
+                <CustomTextField
                   required
                   disabled={!editable}
                   fullWidth
@@ -227,7 +228,7 @@ function ClientProfile() {
               </Grid>
 
               <Grid item xs={12}>
-                <TextField
+                <CustomTextField
                   required
                   disabled={!editable}
                   fullWidth
@@ -244,7 +245,7 @@ function ClientProfile() {
               </Grid>
 
               <Grid item xs={12}>
-                <TextField
+                <CustomTextField
                   required
                   fullWidth
                   disabled={!editable}

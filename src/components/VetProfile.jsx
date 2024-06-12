@@ -1,3 +1,4 @@
+//TODO: el cambio del solor del select no fufa
 import { useState } from 'react';
 import { useAuthStore } from '../hooks/useAuthStore';
 import { isValidEmail, isValidPassword, isValidRegistrationNumber } from "../utils/validators";
@@ -14,25 +15,15 @@ import {
   InputAdornment,
   MenuItem,
   Select,
-  TextField
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import CustomTextField from './CustomTextField';
 
 
 function VetProfile() {
 
   const { vetId } = useAuthStore();
   const [validFetch, setValidFetch] = useState(null);
-
-  // const [vetData, setVetData] = useState({
-  //   id: '',
-  //   registrationNumber: '',
-  //   name: '',
-  //   email: '',
-  //   password: '',
-  //   speciality: 'Doméstico',
-  //   admin: 0
-  // });
 
   const [vetData, setVetData] = useFetchVetByIdData({ vetId });
 
@@ -90,23 +81,6 @@ function VetProfile() {
 
     return valid;
   }
-
-  // useEffect(() => {
-
-  //   async function fetchVetData() {
-  //     let params = new FormData();
-
-  //     let response = await peticionGET("veterinarians/" + vetId, params);
-
-  //     if (response.ok) {
-  //       const data = response.data;
-  //       setVetData(data);
-  //     }
-  //   }
-
-  //   fetchVetData();
-  // }, [vetId]);
-
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -172,7 +146,7 @@ function VetProfile() {
           <Grid container spacing={2}>
 
             <Grid item xs={12}>
-              <TextField
+              <CustomTextField
                 required
                 disabled
                 fullWidth
@@ -187,7 +161,7 @@ function VetProfile() {
             </Grid>
 
             <Grid item xs={12}>
-              <TextField
+              <CustomTextField
                 required
                 fullWidth
                 id="name"
@@ -200,7 +174,7 @@ function VetProfile() {
             </Grid>
 
             <Grid item xs={12}>
-              <TextField
+              <CustomTextField
                 required
                 fullWidth
                 id="email"
@@ -215,7 +189,7 @@ function VetProfile() {
             </Grid>
 
             <Grid item xs={12}>
-              <TextField
+              <CustomTextField
                 required
                 fullWidth
                 id="password"
@@ -242,7 +216,7 @@ function VetProfile() {
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <TextField
+              <CustomTextField
                 required
                 fullWidth
                 id="registrationNumber"
@@ -264,6 +238,13 @@ function VetProfile() {
                 labelId="speciality"
                 value={vetData.speciality}
                 onChange={handleChange}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#199ebc',
+                    },
+                  },
+                }}
               >
                 <MenuItem value={'Doméstico'}>Vet. Doméstico</MenuItem>
                 <MenuItem value={'Exóticos'}>Vet. Animales Exóticos</MenuItem>
@@ -276,7 +257,12 @@ function VetProfile() {
             <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox
-                  sx={{ "& .MuiSvgIcon-root": { fontSize: 24 } }}
+                  sx={{
+                    "& .MuiSvgIcon-root": { fontSize: 24 },
+                    '&.Mui-checked': {
+                      color: '#199ebc',
+                    },
+                  }}
                   checked={vetData.admin}
                   onChange={handleCheckChange}
                 />}

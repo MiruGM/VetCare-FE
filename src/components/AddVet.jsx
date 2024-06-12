@@ -1,3 +1,5 @@
+//TODO: el cambio del solor del select no fufa
+
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { peticionPOSTJSON } from "../utils/ajax";
@@ -10,9 +12,9 @@ import {
   Grid,
   MenuItem,
   Select,
-  TextField
 } from "@mui/material";
 import { Box } from "@mui/system";
+import CustomTextField from './CustomTextField';
 
 function AddVet() {
   const navigate = useNavigate();
@@ -133,7 +135,7 @@ function AddVet() {
 
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12}>
-            <TextField
+            <CustomTextField
               required
               fullWidth
               label="Nombre"
@@ -145,7 +147,7 @@ function AddVet() {
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
+            <CustomTextField
               required
               fullWidth
               label="Correo Electrónico"
@@ -165,7 +167,7 @@ function AddVet() {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <TextField
+            <CustomTextField
               required
               fullWidth
               label="Número de Colegiatura"
@@ -179,7 +181,6 @@ function AddVet() {
               helperText={!isFieldsValid.registrationNumber && 'Compruebe el formato. Ejemplo: 12-12345'}
             />
           </Grid>
-
           <Grid item xs={12} sm={6}>
             <Select
               required
@@ -189,6 +190,13 @@ function AddVet() {
               labelId="speciality"
               value={veterinarianData.speciality}
               onChange={handleChange}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#199ebc',
+                  },
+                },
+              }}
             >
               <MenuItem value={'Doméstico'}>Vet. Doméstico</MenuItem>
               <MenuItem value={'Exóticos'}>Vet. Animales Exóticos</MenuItem>
@@ -205,7 +213,12 @@ function AddVet() {
           <Grid item xs={12}>
             <FormControlLabel
               control={<Checkbox
-                sx={{ "& .MuiSvgIcon-root": { fontSize: 24 } }}
+                sx={{
+                  "& .MuiSvgIcon-root": { fontSize: 24 },
+                  '&.Mui-checked': {
+                    color: '#199ebc',
+                  },
+                }}
                 checked={checked}
                 onChange={handleCheckChange}
               />}

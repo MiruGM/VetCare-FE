@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 import { isValidDni, isValidEmail, isValidPhone } from "../utils/validators";
 
-import { Box, Grid, TextField } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import AlertMessage from './AlertMessage';
+import CustomTextField from './CustomTextField';
 
 function AddClient() {
   const navigate = useNavigate();
@@ -124,7 +125,7 @@ function AddClient() {
         <Box component="form" name="form" onSubmit={handleSubmit} sx={{ mt: 3, display: 'flex', flexDirection: 'column' }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <TextField
+              <CustomTextField
                 required
                 fullWidth
                 id="name"
@@ -137,7 +138,7 @@ function AddClient() {
             </Grid>
 
             <Grid item xs={12}>
-              <TextField
+              <CustomTextField
                 required
                 fullWidth
                 id="dni"
@@ -155,7 +156,7 @@ function AddClient() {
 
 
             <Grid item xs={12}>
-              <TextField
+              <CustomTextField
                 required
                 fullWidth
                 id="email"
@@ -170,7 +171,7 @@ function AddClient() {
             </Grid>
 
             <Grid item xs={12}>
-              <TextField
+              <CustomTextField
                 required
                 fullWidth
                 id="phone"

@@ -29,7 +29,6 @@ function useFetchVetByIdData({ vetId }) {
         fetchVetData();
     }, [vetId]);
 
-    console.log("Vet data: ", vetData);
 
     return [vetData, setVetData];
 }

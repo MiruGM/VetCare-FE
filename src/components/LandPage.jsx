@@ -10,6 +10,7 @@ import Footer from "./Footer";
 import { Divider } from "@mui/material";
 
 import descriptionImg from "../styles/img/intro-img-custom.png";
+import club from "../styles/img/club-img.png";
 import icon1 from "../styles/img/compromiso-icon.png";
 import icon2 from "../styles/img/ciencia-y-tecnologia-icon.png";
 import icon3 from "../styles/img/atencion-icon.png";
@@ -222,7 +223,7 @@ function LandPage() {
         overTitle="¡Apuntate ya!"
         title="Club VetCare"
         text={clubText}
-        img={descriptionImg}
+        img={club}
         alt="Estetoscopio amarillo sobre fondo azul con un corazon rojo dibujado"
         buttonText="Más Información"
         buttonClick={scrollToSection}

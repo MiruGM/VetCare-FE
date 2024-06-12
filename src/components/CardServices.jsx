@@ -1,7 +1,7 @@
+import { Divider } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
 
 
 function MediaCard({ img, alt, title, text }) {
@@ -13,12 +13,13 @@ function MediaCard({ img, alt, title, text }) {
                 title={alt}
             />
             <CardContent>
-                <Typography className="oveTitle" gutterBottom variant="h5" component="div" >
-                    {title}
-                </Typography>
-                <Typography className="title" variant="body2" color="text.secondary">
-                    {text}
-                </Typography>
+                <div  >
+                    <h5 className="overTitle">{title}</h5>
+                </div>
+                <Divider className="short-divider mb-2" />
+                <div>
+                    <span>{text}</span>
+                </div>
             </CardContent>
 
         </Card >

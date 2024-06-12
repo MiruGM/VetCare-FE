@@ -3,8 +3,9 @@ import { peticionGET } from '../utils/ajax';
 import { isValidEmail, isValidDni } from "../utils/validators";
 import { useAuthStore } from '../hooks/useAuthStore';
 
-import { ButtonGroup, Button, TextField } from '@mui/material';
+import { ButtonGroup, Button } from '@mui/material';
 import ClientInfo from './ClientInfo';
+import CustomTextField from './CustomTextField';
 
 function SearchClient() {
   const { setClientId } = useAuthStore();
@@ -139,7 +140,7 @@ function SearchClient() {
             {
               selectedOption === '' || selectedOption === 'option1' && (
                 <div>
-                  <TextField
+                  <CustomTextField
                     required
                     fullWidth
                     id="dni"
@@ -157,7 +158,7 @@ function SearchClient() {
 
             {
               selectedOption === 'option2' && (
-                <TextField
+                <CustomTextField
                   required
                   fullWidth
                   id="email"
@@ -184,8 +185,8 @@ function SearchClient() {
 
       </div>
 
-      <div className='mt-5 mb-5'>
-        {client ? (
+      {client ? (
+        <div className='mt-5 mb-5 custom-list-style'>
           <ClientInfo
             name={client.name}
             dni={client.dni}
@@ -194,10 +195,13 @@ function SearchClient() {
             id={client.id}
             setClientId={setClientId}
           />
-        ) : (
+        </div>
+
+      ) : (
+        <div className='mt-5 mb-5'>
           <h5 className="text-center fw-bold">{message}</h5>
-        )}
-      </div>
+        </div>
+      )}
     </div >
   );
 }

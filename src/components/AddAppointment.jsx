@@ -1,3 +1,5 @@
+//TODO: el cambio del solor del select no fufa
+
 import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
@@ -24,7 +26,6 @@ function AddAppointment() {
 
   const handleBtnClick = (name, value) => {
     if (name === 'petId') {
-      console.log(value);
       setPetId(value);
     }
     if (name === 'date') {
