@@ -3,22 +3,22 @@ import { Link } from 'react-router-dom';
 import { useAuthStore } from '../hooks/useAuthStore';
 import { useNavigate } from "react-router-dom";
 
-// import useFetchClientByIdData from '../hooks/useFetchClientById';
 import { peticionGET, peticionPUTJSON } from '../utils/ajax';
+import { getButtonClass } from '../utils/constants';
 
 import { Box, Grid, TextField, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Divider from '@mui/material/Divider';
+import { isValidEmail, isValidPassword, isValidPhone } from '../utils/validators';
+import AlertMessage from './AlertMessage';
 
-//TODO: hacer la validación de los datos del formulario. 
-//TODO: ARREGLAR LOS ESTILOS DEL BOTÓN CANCELAR
 
 function ClientProfile() {
   const navigate = useNavigate();
   const { isVet, clientId, setPetId } = useAuthStore();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [editable, setEditable] = useState(false);
-  // const [clientData, setClientData] = useFetchClientByIdData();
+  const [validFetch, setValidFetch] = useState(null);
   const [clientData, setClientData] = useState({
     id: '',
     name: '',
@@ -28,7 +28,6 @@ function ClientProfile() {
     password: '',
     pets: [],
   });
-
 
   useEffect(() => {
 
@@ -47,6 +46,57 @@ function ClientProfile() {
     fetchClientData();
   }, [clientId]);
 
+  //Validaciones
+  const validationObj = {
+    email: true,
+    phone: true,
+    password: true
+  }
+  const [isFieldsValid, setIsFieldsValid] = useState(validationObj);
+
+  function validation(data) {
+    let valid = true;
+    let errors = { ...validationObj };
+    let email = data.email.trim();
+    let password = data.password.trim();
+    let phone = data.phone.trim();
+
+    //Validar email
+    if (!isValidEmail(email)) {
+      valid = false;
+      errors = {
+        ...errors,
+        email: false
+      }
+    }
+
+    // Validar teléfono
+    if (!isValidPhone(phone)) {
+      valid = false;
+      errors = {
+        ...errors,
+        phone: false
+      }
+    }
+
+    //Validar la contraseña
+    if (!isValidPassword(password)) {
+      valid = false;
+      errors = {
+        ...errors,
+        password: false
+      }
+    }
+
+    //Validación final 
+    if (!valid) {
+      setIsFieldsValid(errors);
+    } else {
+      setIsFieldsValid(validationObj);
+    }
+
+    return valid;
+  }
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -64,10 +114,10 @@ function ClientProfile() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    async function updateData() {
+    if (validation(clientData)) {
       let obj = {
         dni: clientData.dni,
         name: clientData.name,
@@ -79,16 +129,27 @@ function ClientProfile() {
       let response = await peticionPUTJSON('clients/' + clientId, obj);
 
       if (response.ok) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setValidFetch(true);
         const data = response.data;
         setClientData(data);
+        setEditable(false);
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setValidFetch(false);
       }
+
+
     }
-    updateData();
-    setEditable(false);
+
   };
 
   return (
-    <div className="custom-container custom-container__md-main pt-4 px-4">
+    <div className="custom-container custom-container__md-main p-4 mb-4">
+      <AlertMessage
+        validFetch={validFetch}
+        errorMessage="Error al actulizar los datos. Intentelo de nuevo."
+        successMessage="Datos actualizados correctamente." />
 
       <div className="mb-4">
         <div>
@@ -117,8 +178,6 @@ function ClientProfile() {
                   type="number"
                   value={clientData.id}
                   onChange={handleChange}
-                // error={!isFieldsValid.email}
-                // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
                 />
               </Grid>
 
@@ -133,8 +192,6 @@ function ClientProfile() {
                   type="text"
                   value={clientData.name}
                   onChange={handleChange}
-                // error={!isFieldsValid.email}
-                // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
                 />
               </Grid>
 
@@ -150,8 +207,6 @@ function ClientProfile() {
                   value={clientData.dni}
                   onChange={handleChange}
                   inputProps={{ maxLength: 9 }}
-                // error={!isFieldsValid.email}
-                // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
                 />
               </Grid>
 
@@ -166,8 +221,8 @@ function ClientProfile() {
                   type="text"
                   value={clientData.email}
                   onChange={handleChange}
-                // error={!isFieldsValid.email}
-                // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
+                  error={!isFieldsValid.email}
+                  helperText={!isFieldsValid.email && 'Compruebe el formato. Ejemplo: usuario@dominio.com'}
                 />
               </Grid>
 
@@ -180,10 +235,11 @@ function ClientProfile() {
                   label="Teléfono"
                   name="phone"
                   type="text"
+                  inputProps={{ maxLength: 9 }}
                   value={clientData.phone}
                   onChange={handleChange}
-                // error={!isFieldsValid.email}
-                // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
+                  error={!isFieldsValid.phone}
+                  helperText={!isFieldsValid.phone && 'Compruebe el formato. El número inicial debe ser 6, 7, 8 ó 9. Ejemplo: 666777999'}
                 />
               </Grid>
 
@@ -198,6 +254,8 @@ function ClientProfile() {
                   type={passwordVisible ? 'text' : 'password'}
                   value={clientData.password}
                   onChange={handleChange}
+                  error={!isFieldsValid.password}
+                  helperText={!isFieldsValid.password && "Formato incorrecto. La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número"}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -219,7 +277,7 @@ function ClientProfile() {
               <button
                 type="button"
                 onClick={handleEdit}
-                className="custom-btn mb-3">
+                className={`custom-btn ${getButtonClass(editable)} mb-3`}>
                 {editable
                   ? 'Cancelar'
                   : 'Editar'}
@@ -240,12 +298,12 @@ function ClientProfile() {
 
       <Divider className="long-divider mb-4" />
 
-      <div className="">
+      <div >
         <div>
           <h2 className="title text-center">Mascotas</h2>
         </div>
 
-        <div className="">
+        <div>
           {(clientData.pets === undefined || clientData.pets.length === 0) ? (
             <div className="d-flex justify-content-center mt-3">
               <span className="fw-bold">No hay mascotas registradas</span>
@@ -283,18 +341,20 @@ function ClientProfile() {
             )
           )}
 
-          <div className="custom-container custom-container__button mb-5">
-            {
-              isVet && (
+
+          {
+            isVet && (
+              <div className="custom-container custom-container__button">
                 <button
                   type="button"
-                  className="custom-btn mt-2 mb-3"
+                  className="custom-btn mt-2"
                   onClick={() => { navigate('/addpet') }}>
                   Añadir Mascota
                 </button>
-              )
-            }
-          </div>
+              </div>
+            )
+          }
+
         </div>
       </div>
 

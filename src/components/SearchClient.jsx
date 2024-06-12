@@ -7,7 +7,6 @@ import { ButtonGroup, Button, TextField } from '@mui/material';
 import ClientInfo from './ClientInfo';
 
 function SearchClient() {
-  //TODO: ARREGLAR EL VISUALIZACIÓN DE DATOS DEL CLIENTE EN DESKTOP
   const { setClientId } = useAuthStore();
 
   const [selectedOption, setSelectedOption] = useState('option1');
@@ -150,7 +149,7 @@ function SearchClient() {
                     onChange={(e) => setDni(e.target.value)}
                     inputProps={{ maxLength: 9 }}
                     error={validDniInput === false}
-                    helperText={validDniInput === false && 'Compruebe el formato del DNI'}
+                    helperText={validDniInput === false && 'Compruebe el formato. Ejemplo: 12345678A'}
                   />
                 </div>
               )
@@ -167,7 +166,7 @@ function SearchClient() {
                   type="text"
                   onChange={(e) => setEmail(e.target.value)}
                   error={validEmailInput === false}
-                  helperText={validEmailInput === false && 'Compruebe el formato del correo'}
+                  helperText={validEmailInput === false && 'Compruebe el formato. Ejemplo: usuario@dominio.com'}
                 />
 
               )
@@ -187,16 +186,14 @@ function SearchClient() {
 
       <div className='mt-5 mb-5'>
         {client ? (
-          <div className="custom-list-style">
-            <ClientInfo
-              name={client.name}
-              dni={client.dni}
-              phone={client.phone}
-              email={client.email}
-              id={client.id}
-              setClientId={setClientId}
-            />
-          </div>
+          <ClientInfo
+            name={client.name}
+            dni={client.dni}
+            phone={client.phone}
+            email={client.email}
+            id={client.id}
+            setClientId={setClientId}
+          />
         ) : (
           <h5 className="text-center fw-bold">{message}</h5>
         )}

@@ -1,5 +1,3 @@
-//TODO: REGULAR LAS RUTAS
-//TODO: CAMBIAR LA RUTA DE PET Y APPINTMET PARA QUE NO SAQUEN EL ID
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import './styles/custom.scss';

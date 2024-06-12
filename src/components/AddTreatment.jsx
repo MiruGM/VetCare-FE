@@ -1,10 +1,9 @@
-//TODO: VALIDACIONES DE LOS CAMPOS
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from '../hooks/useAuthStore';
 
-
 import { peticionPOSTJSON } from "../utils/ajax";
+import AlertMessage from "./AlertMessage";
 
 import {
   Box,
@@ -17,14 +16,11 @@ import {
   Divider,
   InputAdornment
 } from "@mui/material";
-import AlertMessage from "./AlertMessage";
 
 
 function AddTreatment() {
   const navigate = useNavigate();
   const { appointmentId } = useAuthStore();
-
-  // const { appointmentId } = useParams();
 
   const [validFetch, setValidFetch] = useState(null);
   const [checked, setChecked] = useState(false);
@@ -79,7 +75,10 @@ function AddTreatment() {
 
       setTimeout(() => {
         navigate("/petprofile");
-      }, 1500);
+      }, 2000);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setValidFetch(false);
     }
 
   };
@@ -105,7 +104,6 @@ function AddTreatment() {
               id="reason"
               name="reason"
               labelId="reason-label"
-              // label="Motivo"
               value={treatmentData.reason}
               onChange={handleChange}
             >
@@ -128,9 +126,6 @@ function AddTreatment() {
               type="text"
               value={treatmentData.name}
               onChange={handleChange}
-            // inputProps={{ maxLength: 50 }}
-            // error={!isFieldsValid.email}
-            // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
             />
           </Grid>
 
@@ -146,9 +141,6 @@ function AddTreatment() {
               rows={5}
               value={treatmentData.description}
               onChange={handleChange}
-            // inputProps={{ maxLength: 50 }}
-            // error={!isFieldsValid.email}
-            // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
             />
           </Grid>
 
@@ -166,9 +158,6 @@ function AddTreatment() {
               type="text"
               value={treatmentData.duration}
               onChange={handleChange}
-            // inputProps={{ maxLength: 50 }}
-            // error={!isFieldsValid.email}
-            // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
             />
           </Grid>
 
@@ -182,9 +171,6 @@ function AddTreatment() {
               type="text"
               value={treatmentData.frequency}
               onChange={handleChange}
-            // inputProps={{ maxLength: 50 }}
-            // error={!isFieldsValid.email}
-            // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
             />
           </Grid>
 
@@ -198,9 +184,6 @@ function AddTreatment() {
               type="text"
               value={treatmentData.meds}
               onChange={handleChange}
-            // inputProps={{ maxLength: 50 }}
-            // error={!isFieldsValid.email}
-            // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
             />
           </Grid>
 
@@ -234,9 +217,6 @@ function AddTreatment() {
               }}
               value={treatmentData.price}
               onChange={handleChange}
-            // inputProps={{ maxLength: 50 }}
-            // error={!isFieldsValid.email}
-            // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
             />
           </Grid>
         </Grid>

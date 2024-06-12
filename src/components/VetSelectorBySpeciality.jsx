@@ -5,7 +5,7 @@ import { Select, MenuItem } from "@mui/material";
 
 
 function VetSelectorBySpeciality({ appointmentData, handleBtnClick }) {
-  const [speciality, setSpecialty] = useState('domestico');
+  const [speciality, setSpecialty] = useState('Doméstico');
 
   const veterinarians = useFetchVetsBySpacialityData({ speciality });
 
@@ -28,9 +28,9 @@ function VetSelectorBySpeciality({ appointmentData, handleBtnClick }) {
           value={speciality}
           onChange={(e) => { setSpecialty(e.target.value); }}
         >
-          <MenuItem value="domestico">Vet. Doméstico</MenuItem>
-          <MenuItem value="exotico">Vet. Animales Exóticos</MenuItem>
-          <MenuItem value="aves">Vet. Aves</MenuItem>
+          <MenuItem value="Doméstico">Vet. Doméstico</MenuItem>
+          <MenuItem value="Exótico">Vet. Animales Exóticos</MenuItem>
+          <MenuItem value="Aves">Vet. Aves</MenuItem>
 
         </Select>
 

@@ -1,58 +1,61 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
 function ClientInfo({ name, dni, phone, email, id, setClientId }) {
+  const navigate = useNavigate();
+
+
+  const handleBtnClick = (btnType) => {
+    setClientId(id);
+
+    if (btnType === "profile") {
+      navigate("/clientprofile");
+    } else if (btnType === "app") {
+      navigate("/addappointment");
+    }
+
+  };
 
   return (
-    <>
-      <div className="d-block d-sm-none">
-        <h6 className="text-center overTitle mb-0">{name}</h6>
-        <span className="d-block text-center mb-2 small-text">({dni})</span>
-        <span className="d-block mb-1"><PhoneIphoneIcon className="me-2" />{phone}</span>
-        <span className="d-block"><MailOutlineIcon className="me-2" />{email}</span>
+    <div className="custom-list-style">
+      <div className="container">
 
-        <Link to={'/clientprofile'} onClick={() => { setClientId(id); }}>
-          <div className="custom-container custom-container__button mt-2">
-            <button className="mt-2 custom-btn custom-btn__clear">Ir al Perfil</button>
+        <div className="row">
+          <div className="col-12">
+            <h6 className="text-center overTitle mb-0">{name}</h6>
+            <span className="d-block text-center mb-2 small-text">({dni})</span>
           </div>
-        </Link>
-
-        <Link to={'/addappointment'} onClick={() => { setClientId(id); }}>
-          <div className="custom-container custom-container__button">
-            <button className="mt-2 custom-btn">Agendar Cita</button>
+        </div>
+        <div className="row">
+          <div className="col-12 col-sm-6">
+            <span ><PhoneIphoneIcon className="me-2" />{phone}</span>
           </div>
-        </Link>
+          <div className="col-12 col-sm-6">
+            <span><MailOutlineIcon className="me-2" />{email}</span>
+          </div>
+        </div>
       </div>
 
-      <div className="d-none d-sm-block">
-        <div className="d-block ">
-          <h6 className="text-center overTitle mb-0">{name}</h6>
-          <span className="d-block text-center mb-2 small-text">({dni})</span>
-        </div>
+      <div className="custom-container custom-container__button mt-3">
+        <button
+          type="button"
+          className="custom-btn custom-btn__clear"
+          onClick={() => handleBtnClick("profile")}
+        >
+          Ir al Perfil
+        </button>
 
-        <div className="d-flex flex-row justify-content-evenly mt-2">
-          <span className="d-block mb-1"><PhoneIphoneIcon className="me-2" />{phone}</span>
-          <span className="d-block"><MailOutlineIcon className="me-2" />{email}</span>
-        </div>
-
-        <div className="d-flex flex-row justify-content-evenly mt-3">
-          <Link to={'/clientprofile'} onClick={() => { setClientId(id); }}>
-            <div className="custom-container custom-container__md-button">
-              <button className="mt-2 custom-btn custom-btn__clear">Ir al Perfil</button>
-            </div>
-          </Link >
-
-          <Link to={'/addappointment'} onClick={() => { setClientId(id); }}>
-            <div className="custom-container custom-container__md-button ms-3 ">
-              <button className="mt-2 custom-btn">Agendar Cita</button>
-            </div>
-          </Link>
-        </div >
-
+        <button
+          type="button"
+          className="mt-2 mt-md-0 custom-btn"
+          onClick={() => handleBtnClick("app")}
+        >
+          Agendar Cita
+        </button>
       </div >
-    </>
+    </div >
 
   );
 }

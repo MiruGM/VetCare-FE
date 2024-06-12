@@ -16,7 +16,6 @@ export const isValidDni = (dni) => {
     return regExpDni.test(dni);
 };
 
-
 //Validación para el teléfono
 export const isValidPhone = (phone) => {
     const regExpPhone = /^[6-9]\d{8}$/;
@@ -32,5 +31,11 @@ export const isValidChipNum = (chipNum) => {
 //Validación para el número de colegiado de los veterinarios
 export const isValidRegistrationNumber = (registrationNumber) => {
     const regExpRegistrationNumber = /^\d{2}-\d{5}$/;
+    return regExpRegistrationNumber.test(registrationNumber);
+}
+
+//Validación para el número de chip/registro de la mascota
+export const isValidRegistrationNumberPet = (registrationNumber) => {
+    const regExpRegistrationNumber = /^\d{15}$/;
     return regExpRegistrationNumber.test(registrationNumber);
 }

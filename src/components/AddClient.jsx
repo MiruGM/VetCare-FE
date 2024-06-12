@@ -18,49 +18,13 @@ function AddClient() {
     password: '123456Aa',
   });
 
-
+  //Validaciones
   const validationObj = {
     dni: true,
     email: true,
     phone: true,
   }
   const [isFieldsValid, setIsFieldsValid] = useState(validationObj);
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setClientData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    if (validation(clientData)) {
-      let response = await peticionPOSTJSON('clients', clientData);
-
-      if (response.ok) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setValidFetch(true);
-        setClientData({
-          dni: '',
-          name: '',
-          email: '',
-          phone: '',
-          password: '123456Aa'
-        });
-        setTimeout(() => {
-          navigate("/listclients");
-        }, 2000);
-
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setValidFetch(false);
-      }
-    }
-  };
-
 
   function validation(data) {
     let valid = true;
@@ -105,6 +69,44 @@ function AddClient() {
 
     return valid;
   }
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setClientData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (validation(clientData)) {
+      let response = await peticionPOSTJSON('clients', clientData);
+
+      if (response.ok) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setValidFetch(true);
+        setClientData({
+          dni: '',
+          name: '',
+          email: '',
+          phone: '',
+          password: '123456Aa'
+        });
+        setTimeout(() => {
+          navigate("/listclients");
+        }, 2000);
+
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setValidFetch(false);
+      }
+    }
+  };
+
+
+
 
   return (
     <div className="custom-container custom-container__md-main pt-4 px-4 pb-3">

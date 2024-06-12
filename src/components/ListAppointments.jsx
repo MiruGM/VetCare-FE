@@ -94,7 +94,7 @@ function ListAppointments() {
       setReload(!reload);
       setTimeout(() => {
         setAlert(false);
-      }, 3000);
+      }, 2000);
 
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -103,7 +103,7 @@ function ListAppointments() {
       setAlert(true);
       setTimeout(() => {
         setAlert(false);
-      }, 3000);
+      }, 2000);
 
     }
   };

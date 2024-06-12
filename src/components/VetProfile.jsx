@@ -1,9 +1,10 @@
-//TODO: VALIDACIÓN DE DATOS DE FORMULARIOS
-
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAuthStore } from '../hooks/useAuthStore';
-// import { useNavigate } from "react-router-dom";
-import { peticionGET, peticionPUTJSON } from '../utils/ajax';
+import { isValidEmail, isValidPassword, isValidRegistrationNumber } from "../utils/validators";
+import { peticionPUTJSON } from '../utils/ajax';
+import AlertMessage from './AlertMessage';
+import useFetchVetByIdData from '../hooks/useFetchVetById';
+
 import { Box } from '@mui/system';
 import {
   Checkbox,
@@ -16,40 +17,95 @@ import {
   TextField
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import AlertMessage from './AlertMessage';
+
 
 function VetProfile() {
-  // const navigate = useNavigate();
+
   const { vetId } = useAuthStore();
   const [validFetch, setValidFetch] = useState(null);
 
-  const [vetData, setVetData] = useState({
-    id: '',
-    registrationNumber: '',
-    name: '',
-    email: '',
-    password: '',
-    speciality: 'Doméstico',
-    admin: 0
-  });
+  // const [vetData, setVetData] = useState({
+  //   id: '',
+  //   registrationNumber: '',
+  //   name: '',
+  //   email: '',
+  //   password: '',
+  //   speciality: 'Doméstico',
+  //   admin: 0
+  // });
+
+  const [vetData, setVetData] = useFetchVetByIdData({ vetId });
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  useEffect(() => {
+  //Validaciones
+  const validationObj = {
+    email: true,
+    password: true,
+    registrationNumber: true,
 
-    async function fetchVetData() {
-      let params = new FormData();
+  }
+  const [isFieldsValid, setIsFieldsValid] = useState(validationObj);
 
-      let response = await peticionGET("veterinarians/" + vetId, params);
+  function validation(data) {
+    let valid = true;
+    let errors = { ...validationObj };
+    let email = data.email.trim();
+    let password = data.password.trim();
+    let registrationNumber = data.registrationNumber.trim();
 
-      if (response.ok) {
-        const data = response.data;
-        setVetData(data);
+    //Validar email
+    if (!isValidEmail(email)) {
+      valid = false;
+      errors = {
+        ...errors,
+        email: false
       }
     }
 
-    fetchVetData();
-  }, [vetId]);
+    //Validar constraseña
+    if (!isValidPassword(password)) {
+      valid = false;
+      errors = {
+        ...errors,
+        password: false
+      }
+    }
+
+    //Validar número de colegiado
+    if (!isValidRegistrationNumber(registrationNumber)) {
+      valid = false;
+      errors = {
+        ...errors,
+        registrationNumber: false
+      }
+    }
+
+    //Validación final 
+    if (!valid) {
+      setIsFieldsValid(errors);
+    } else {
+      setIsFieldsValid(validationObj);
+    }
+
+    return valid;
+  }
+
+  // useEffect(() => {
+
+  //   async function fetchVetData() {
+  //     let params = new FormData();
+
+  //     let response = await peticionGET("veterinarians/" + vetId, params);
+
+  //     if (response.ok) {
+  //       const data = response.data;
+  //       setVetData(data);
+  //     }
+  //   }
+
+  //   fetchVetData();
+  // }, [vetId]);
 
 
   const togglePasswordVisibility = () => {
@@ -71,10 +127,9 @@ function VetProfile() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
-    async function updateDate() {
+    if (validation(vetData)) {
       let obj = {
         registrationNumber: vetData.registrationNumber,
         name: vetData.name,
@@ -96,10 +151,7 @@ function VetProfile() {
         setValidFetch(false);
       }
     }
-
-    updateDate();
   }
-
 
   return (
     <div className="custom-container custom-container__md-main pt-4 px-4">
@@ -130,8 +182,7 @@ function VetProfile() {
                 type="number"
                 value={vetData.id}
                 onChange={handleChange}
-              // error={!isFieldsValid.email}
-              // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
+
               />
             </Grid>
 
@@ -145,8 +196,6 @@ function VetProfile() {
                 type="text"
                 value={vetData.name}
                 onChange={handleChange}
-              // error={!isFieldsValid.email}
-              // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
               />
             </Grid>
 
@@ -160,8 +209,8 @@ function VetProfile() {
                 type="text"
                 value={vetData.email}
                 onChange={handleChange}
-              // error={!isFieldsValid.email}
-              // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
+                error={!isFieldsValid.email}
+                helperText={!isFieldsValid.email && 'Compruebe el formato. Ejemplo: usuario@vetcare.com'}
               />
             </Grid>
 
@@ -175,6 +224,8 @@ function VetProfile() {
                 type={passwordVisible ? 'text' : 'password'}
                 value={vetData.password}
                 onChange={handleChange}
+                error={!isFieldsValid.password}
+                helperText={!isFieldsValid.password && "Formato incorrecto. La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número"}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -190,7 +241,7 @@ function VetProfile() {
               />
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 required
                 fullWidth
@@ -200,8 +251,8 @@ function VetProfile() {
                 type="text"
                 value={vetData.registrationNumber}
                 onChange={handleChange}
-              // error={!isFieldsValid.email}
-              // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
+                error={!isFieldsValid.registrationNumber}
+                helperText={!isFieldsValid.registrationNumber && 'Compruebe el formato. Ejemplo: 12-12345'}
               />
             </Grid>
             <Grid item xs={12} sm={6}>

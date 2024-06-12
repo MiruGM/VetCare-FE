@@ -1,8 +1,8 @@
-//TODO: VALIDACIÓN DE DATOS
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { peticionPOSTJSON } from "../utils/ajax";
-
+import AlertMessage from "./AlertMessage";
+import { isValidEmail, isValidRegistrationNumber } from "../utils/validators";
 import {
   Checkbox,
   Divider,
@@ -13,8 +13,6 @@ import {
   TextField
 } from "@mui/material";
 import { Box } from "@mui/system";
-import AlertMessage from "./AlertMessage";
-
 
 function AddVet() {
   const navigate = useNavigate();
@@ -29,6 +27,47 @@ function AddVet() {
     speciality: 'Doméstico',
     admin: 0
   });
+
+  //Validaciones
+  const validationObj = {
+    email: true,
+    registrationNumber: true,
+  }
+  const [isFieldsValid, setIsFieldsValid] = useState(validationObj);
+
+  function validation(data) {
+    let valid = true;
+    let errors = { ...validationObj };
+    let email = data.email.trim();
+    let registrationNumber = data.registrationNumber.trim();
+
+    //Validar email
+    if (!isValidEmail(email)) {
+      valid = false;
+      errors = {
+        ...errors,
+        email: false
+      }
+    }
+
+    //Validar número de colegiado
+    if (!isValidRegistrationNumber(registrationNumber)) {
+      valid = false;
+      errors = {
+        ...errors,
+        registrationNumber: false
+      }
+    }
+
+    //Validación final 
+    if (!valid) {
+      setIsFieldsValid(errors);
+    } else {
+      setIsFieldsValid(validationObj);
+    }
+
+    return valid;
+  }
 
   const handleCheckChange = (event) => {
     setChecked(event.target.checked);
@@ -49,27 +88,30 @@ function AddVet() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    let response = await peticionPOSTJSON('veterinarians', veterinarianData);
+    if (validation(veterinarianData)) {
+      let response = await peticionPOSTJSON('veterinarians', veterinarianData);
 
-    if (response.ok) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setValidFetch(true);
-      setVeterinarianData({
-        registrationNumber: '',
-        name: '',
-        email: '',
-        password: '123456Aa',
-        specialty: 'domestico',
-        admin: 0
-      });
+      if (response.ok) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setValidFetch(true);
+        setVeterinarianData({
+          registrationNumber: '',
+          name: '',
+          email: '',
+          password: '123456Aa',
+          specialty: 'Doméstico',
+          admin: 0
+        });
 
-      setTimeout(() => {
-        navigate("/listvets");
-      }, 1500);
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setValidFetch(false);
+        setTimeout(() => {
+          navigate("/listvets");
+        }, 2000);
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setValidFetch(false);
+      }
     }
+
 
   };
 
@@ -100,9 +142,6 @@ function AddVet() {
               type="text"
               value={veterinarianData.name}
               onChange={handleChange}
-            // inputProps={{ maxLength: 50 }}
-            // error={!isFieldsValid.email}
-            // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
             />
           </Grid>
           <Grid item xs={12}>
@@ -115,9 +154,8 @@ function AddVet() {
               type="text"
               value={veterinarianData.email}
               onChange={handleChange}
-            // inputProps={{ maxLength: 50 }}
-            // error={!isFieldsValid.email}
-            // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
+              error={!isFieldsValid.email}
+              helperText={!isFieldsValid.email && 'Compruebe el formato. Ejemplo: usuario@vetcare.com'}
             />
           </Grid>
 
@@ -136,9 +174,9 @@ function AddVet() {
               type="text"
               value={veterinarianData.registrationNumber}
               onChange={handleChange}
-            // inputProps={{ maxLength: 50 }}
-            // error={!isFieldsValid.email}
-            // helperText={!isFieldsValid.email && 'Compruebe el formato del correo'}
+              inputProps={{ maxLength: 8 }}
+              error={!isFieldsValid.registrationNumber}
+              helperText={!isFieldsValid.registrationNumber && 'Compruebe el formato. Ejemplo: 12-12345'}
             />
           </Grid>
 

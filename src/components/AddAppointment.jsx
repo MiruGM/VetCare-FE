@@ -8,9 +8,11 @@ import ClientData from "./ClientData";
 import VetSelectorBySpeciality from "./VetSelectorBySpeciality";
 import TimeDateSelector from "./TimeDateSelector";
 import AlertMessage from "./AlertMessage";
+import { useAuthStore } from "../hooks/useAuthStore";
 
 function AddAppointment() {
   const navigate = useNavigate();
+  const { setPetId } = useAuthStore();
   const [validFetch, setValidFetch] = useState(null);
   const [appointmentData, setAppointmentData] = useState({
     date: '',
@@ -21,8 +23,11 @@ function AddAppointment() {
   });
 
   const handleBtnClick = (name, value) => {
+    if (name === 'petId') {
+      console.log(value);
+      setPetId(value);
+    }
     if (name === 'date') {
-
       value = value.split(' ')[1];
     }
     setAppointmentData((prevState) => ({
@@ -40,7 +45,7 @@ function AddAppointment() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       setValidFetch(true);
       setTimeout(() => {
-        navigate("/petprofile/" + appointmentData.petId);
+        navigate("/petprofile/");
       }, 2000);
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });

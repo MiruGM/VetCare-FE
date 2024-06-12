@@ -15,13 +15,13 @@ const ProtectedRoute = ({ element: Component, requiredRole, ...rest }) => {
             hasRequiredRole = isAdmin && isVet && isAuthenticated;
             break;
         case 'vet':
-            hasRequiredRole = !isAdmin && isVet && isAuthenticated;
+            hasRequiredRole = isVet && isAuthenticated;
             break;
         case 'general':
-            hasRequiredRole = !isAdmin && !isVet && isAuthenticated;
+            hasRequiredRole = isAuthenticated;
             break;
         default:
-            hasRequiredRole = isAuthenticated;
+            hasRequiredRole = !isAuthenticated;
     }
 
     return isAuthenticated && hasRequiredRole ? (

@@ -1,5 +1,5 @@
 import { peticionDELETE } from "../utils/ajax";
-import { getReason } from '../utils/constants';
+import { getReason, getDateClass } from '../utils/constants';
 import { useState } from "react";
 import AlertModal from "./AlertModal";
 import useFetchAllVetsData from "../hooks/useFetchAllVets";
@@ -54,7 +54,7 @@ function AppointmentHistory({ isVet, navigate, appointmentsData, setAlert, setRe
       setReload(!reload);
       setTimeout(() => {
         setAlert(false);
-      }, 3000);
+      }, 2000);
 
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -63,7 +63,7 @@ function AppointmentHistory({ isVet, navigate, appointmentsData, setAlert, setRe
       setAlert(true);
       setTimeout(() => {
         setAlert(false);
-      }, 3000);
+      }, 2000);
 
     }
   };
@@ -87,8 +87,8 @@ function AppointmentHistory({ isVet, navigate, appointmentsData, setAlert, setRe
         <div>
           {
             currentAppointments.map((appointment) => (
-              <div className="custom-list-style" key={appointment.id}>
-                <div className={`custom-container custom-container__reason-pill uppercase ${getReason(appointment.reason)} mb-2`}>
+              <div className={`custom-list-style ${getDateClass(appointment.date)}`} key={appointment.id}>
+                <div className={`custom-container custom-container__reason-pill uppercase ${getReason(appointment.reason, appointment.date)} mb-2`}>
                   {appointment.reason}
                 </div>
                 <div className="container">
@@ -139,7 +139,7 @@ function AppointmentHistory({ isVet, navigate, appointmentsData, setAlert, setRe
                     )
                   }
                   {
-                    appointment.date > new Date().toISOString() && (
+                    appointment.date >= new Date().toISOString() && (
                       <button
                         type="button"
                         onClick={() => handleDelete(appointment.id)}

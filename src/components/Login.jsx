@@ -17,57 +17,13 @@ function Login() {
   const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
 
+  //Validaciones
   const [validFetch, setValidFetch] = useState(null);
   const validationObj = {
     email: true,
     password: true
   };
   const [isFieldsValid, setIsFieldsValid] = useState(validationObj);
-
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    const data = new FormData(event.currentTarget);
-
-    if (validation(data)) {
-      //Crear el objeto con el 
-      let oLogin = {
-        email: data.get("email").trim(),
-        password: data.get("password").trim()
-      };
-
-      //Enviar la petición 
-      let response = await peticionPOSTJSON("login", oLogin);
-
-      if (response.ok && response.message === "Veterinario logueado") {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setIsAuthenticated(true);
-        setIsVet(true);
-        setIsAdmin(response.data.admin);
-        setVetId(response.data.id);
-        setValidFetch(true);
-        setTimeout(() => {
-          navigate("/listclients");
-        }, 1500);
-      } else if (response.ok && response.message === "Cliente logueado") {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setIsAuthenticated(true);
-        setIsVet(false);
-        setClientId(response.data.id);
-        setValidFetch(true);
-        setTimeout(() => {
-          navigate("/clientprofile");
-        }, 1500);
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setValidFetch(false);
-      }
-    }
-  };
 
   function validation(data) {
     let valid = true;
@@ -105,6 +61,53 @@ function Login() {
 
     return valid;
   }
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const data = new FormData(event.currentTarget);
+
+    if (validation(data)) {
+      //Crear el objeto con el 
+      let oLogin = {
+        email: data.get("email").trim(),
+        password: data.get("password").trim()
+      };
+
+      //Enviar la petición 
+      let response = await peticionPOSTJSON("login", oLogin);
+
+      if (response.ok && response.message === "Veterinario logueado") {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setIsAuthenticated(true);
+        setIsVet(true);
+        setIsAdmin(response.data.admin);
+        setVetId(response.data.id);
+        setValidFetch(true);
+        setTimeout(() => {
+          navigate("/listclients");
+        }, 1000);
+      } else if (response.ok && response.message === "Cliente logueado") {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setIsAuthenticated(true);
+        setIsVet(false);
+        setClientId(response.data.id);
+        setValidFetch(true);
+        setTimeout(() => {
+          navigate("/clientprofile");
+        }, 1000);
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setValidFetch(false);
+      }
+    }
+  };
+
+
 
   return (
     <div className="container custom-container custom-container__login custom-container__md-main mb-3">
@@ -150,7 +153,7 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               error={!isFieldsValid.password}
-              helperText={!isFieldsValid.password && "Formato de la contraseña incorrecto"}
+              helperText={!isFieldsValid.password && "Formato incorrecto. La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número"}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
