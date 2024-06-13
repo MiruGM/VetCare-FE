@@ -1,13 +1,15 @@
-import { useState } from "react";
 import { peticionPOSTJSON } from "../utils/ajax";
 import { useAuthStore } from '../hooks/useAuthStore';
+import { isValidEmail, isValidPassword } from "../utils/validators";
+import AlertMessage from "./AlertMessage";
+import CustomTextField from './CustomTextField';
+
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { isValidEmail, isValidPassword } from "../utils/validators";
-
-import { Box, Grid, TextField, IconButton, InputAdornment } from '@mui/material';
+import { Box, Grid, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import AlertMessage from "./AlertMessage";
+
 
 function Login() {
   const navigate = useNavigate();
@@ -125,7 +127,7 @@ function Login() {
 
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <TextField
+            <CustomTextField
               required
               fullWidth
               id="email"
@@ -141,7 +143,7 @@ function Login() {
           </Grid>
 
           <Grid item xs={12}>
-            <TextField
+            <CustomTextField
               required
               fullWidth
               id="password"

@@ -1,7 +1,9 @@
 "use strict";
 
 //Ruta de la API
-const rutaBackend = "http://localhost:3000/api/";
+// const rutaBackend = "http://localhost:3000/api/";
+const rutaBackend = "vetcare-be-production.up.railway.app/api/";
+
 
 //PETICIONES
 async function peticionGET(url, params) {
