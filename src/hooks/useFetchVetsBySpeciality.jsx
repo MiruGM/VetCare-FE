@@ -15,6 +15,8 @@ function useFetchVetsBySpecialityData({ speciality }) {
             if (response.ok) {
                 const data = response.data;
                 setVeterinarians(data);
+            } else {
+                setVeterinarians([]);
             }
         }
 

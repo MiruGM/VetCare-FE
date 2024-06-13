@@ -5,10 +5,10 @@ import { Select, MenuItem } from "@mui/material";
 
 
 function VetSelectorBySpeciality({ appointmentData, handleBtnClick }) {
-  const [speciality, setSpecialty] = useState('Doméstico');
+  const [speciality, setSpeciality] = useState('Doméstico');
 
   const veterinarians = useFetchVetsBySpacialityData({ speciality });
-
+  console.log(veterinarians);
   return (
     <div>
       <div>
@@ -26,10 +26,10 @@ function VetSelectorBySpeciality({ appointmentData, handleBtnClick }) {
           name="speciality"
           labelId="speciality-label"
           value={speciality}
-          onChange={(e) => { setSpecialty(e.target.value); }}
+          onChange={(e) => { setSpeciality(e.target.value); }}
         >
           <MenuItem value="Doméstico">Vet. Doméstico</MenuItem>
-          <MenuItem value="Exótico">Vet. Animales Exóticos</MenuItem>
+          <MenuItem value="Exóticos">Vet. Animales Exóticos</MenuItem>
           <MenuItem value="Aves">Vet. Aves</MenuItem>
 
         </Select>
@@ -45,7 +45,7 @@ function VetSelectorBySpeciality({ appointmentData, handleBtnClick }) {
                 <div className="row">
                   {veterinarians.map((vet) => {
                     return (
-                      <div key={vet.id} className="col-12 col-md-6">
+                      <div key={vet.id} className={veterinarians.length === 1 ? "col-12" : "col-12 col-md-6"}>
                         <div
                           className={appointmentData.veterinarianId === vet.id
                             ? "custom-list-style custom-list-style__selected"
@@ -54,7 +54,6 @@ function VetSelectorBySpeciality({ appointmentData, handleBtnClick }) {
                           <span className="d-block overTitle text-center">{vet.name}</span>
                         </div>
                       </div>
-
                     )
                   })
                   }

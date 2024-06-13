@@ -1,5 +1,3 @@
-//TODO: el cambio del solor del select no fufa
-
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { peticionPOSTJSON } from "../utils/ajax";

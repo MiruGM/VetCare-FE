@@ -1,5 +1,3 @@
-//TODO: el cambio del solor del select no fufa
-
 import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";

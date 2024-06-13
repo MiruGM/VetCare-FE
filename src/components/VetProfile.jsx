@@ -1,4 +1,3 @@
-//TODO: el cambio del solor del select no fufa
 import { useState } from 'react';
 import { useAuthStore } from '../hooks/useAuthStore';
 import { isValidEmail, isValidPassword, isValidRegistrationNumber } from "../utils/validators";
