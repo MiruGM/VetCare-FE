@@ -4,7 +4,6 @@
 // const rutaBackend = "http://localhost:3000/api/";
 const rutaBackend = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000/api/";
 
-
 //PETICIONES
 async function peticionGET(url, params) {
     //Crear la ruta completa
